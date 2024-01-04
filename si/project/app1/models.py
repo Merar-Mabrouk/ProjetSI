@@ -1,51 +1,56 @@
+    
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
-# Create your models here.
+
 class Product(models.Model):
-    code=models.CharField(max_length=10,auto_created=True)
-    name=models.CharField(max_length=40)
-    designation=models.CharField(max_length=10,choices= [
-        (MATIERE_PREMIERE, 'Matière Première'),
-        (UTILISER, 'Utiliser'),
-    ],default=MATIERE_PREMIERE)
-    nbrs=models.IntegerField(max_length=10)
-    
+    code = models.CharField(max_length=10, unique=True,auto_created=True)
+    designation = models.CharField(max_length=50,default=MATIERE_PREMIERE)
 
 class Client(models.Model):
-    code=models.AutoField(max_length=10,auto_created=True)    
-    name=models.CharField(max_length=40)
-    pren=models.CharField(max_length=40)
-    adr=models.CharField(max_length=40)
-    phone=models= PhoneNumberField()
-    credit=models.models.FloatField()
-     
-class Fournisseur(models.Model):
-    code=models.AutoField(max_length=10,auto_created=True)    
-    name=models.CharField(max_length=40)
-    pren=models.CharField(max_length=40)
-    adr=models.CharField(max_length=40)
-    phone=models= PhoneNumberField()
-    solde=models.models.FloatField()
-    
+    code = models.CharField(max_length=10, unique=True,auto_created=True)
+    first_name = models.CharField(max_length=40)
+    last_name = models.CharField(max_length=40)
+    address = models.CharField(max_length=100)
+    phone = PhoneNumberField()
+    credit = models.FloatField()
+
+class Supplier(models.Model):
+    code = models.CharField(max_length=10, unique=True)
+    first_name = models.CharField(max_length=40)
+    last_name = models.CharField(max_length=40)
+    address = models.CharField(max_length=100)
+    phone = PhoneNumberField()
+    balance = models.FloatField()
+
 class Centre(models.Model):
-    code=models.AutoField(max_length=10,auto_created=True) 
-    designation=models.IntegerField(choices= [
-        (FIRST, 1),
-        (SECOND, 2),
-        (THREE, 3),
-    ])
-    
-class Employe(models.Model):    
-    code=models.AutoField(max_length=10,auto_created=True)    
-    name=models.CharField(max_length=40)
-    pren=models.CharField(max_length=40)
-    adr=models.CharField(max_length=40)
-    phone=models= PhoneNumberField()
-    salaire=models.models.FloatField()
-    Centre=models.ForeignKey(Centre, on_delete=models.CASCADE)
-    
-class achat(models.Model):
-    code=models.AutoField(max_length=10,auto_created=True,unique=True)    
-    date=models.DateField( auto_now=True, auto_now_add=True,)
-         
-    
+    code = models.CharField(max_length=10, unique=True)
+    designation = models.CharField(max_length=50)
+
+class Employee(models.Model):
+    code = models.CharField(max_length=10, unique=True)
+    first_name = models.CharField(max_length=40)
+    last_name = models.CharField(max_length=40)
+    address = models.CharField(max_length=100)
+    phone = PhoneNumberField()
+    daily_salary = models.FloatField()
+    centre = models.ForeignKey(Centre, on_delete=models.CASCADE)
+
+class Purchase(models.Model):
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    unit_price = models.FloatField()
+    total_price = models.FloatField()
+
+class Transfer(models.Model):
+    date = models.DateField(auto_now_add=True)
+    centre = models.ForeignKey(Centre, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+class Sale(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    unit_price = models.FloatField()
+    total_price = models.FloatField()
