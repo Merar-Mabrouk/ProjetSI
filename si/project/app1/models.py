@@ -48,4 +48,4 @@ class achat(models.Model):
     code=models.AutoField(max_length=10,auto_created=True,unique=True)    
     date=models.DateField( auto_now=True, auto_now_add=True,)
          
-    
+         
