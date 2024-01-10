@@ -77,5 +77,34 @@ class ReglementAchat(models.Model):
     rigli=models.BooleanField(default=False)
     restant=models.FloatField(max_length=10,null=False)
     
-    
-    
+class Employe(models.Model):
+    Code_E = models.CharField(max_length=20, primary_key=True)
+    Nom_E = models.CharField(max_length=100)
+    Prenom_E = models.CharField(max_length=100)
+    Adresse_E = models.CharField(max_length=200)
+    Tel_E = models.CharField(max_length=15)
+    Salaire_par_jour = models.DecimalField(max_digits=10, decimal_places=2)
+    fk_Code_CE = models.CharField(max_length=20)  # Assurez-vous que le type correspond au type de la clé étrangère dans votre modèle Code_CE
+
+class PV(models.Model):
+    Date_PV = models.DateField(primary_key=True)
+    Text = models.TextField()
+
+class EnRapport(models.Model):
+    fk_Code_E = models.ForeignKey(Employe, on_delete=models.CASCADE)
+    fk_Date_PV = models.ForeignKey(PV, on_delete=models.CASCADE)
+
+class Doit(models.Model):
+    fk_Code = models.CharField(max_length=20)
+    fk_Num_P = models.IntegerField()
+
+class Pointage(models.Model):
+    Num_P = models.AutoField(primary_key=True)
+    Date_P = models.DateField()
+    Pointe = models.BooleanField()
+
+class MASSROUF(models.Model):
+    Num_MAS = models.AutoField(primary_key=True)
+    Date_M = models.DateField()
+    Credit = models.DecimalField(max_digits=10, decimal_places=2)
+    fk_Code_E = models.ForeignKey(Employe, on_delete=models.CASCADE)
