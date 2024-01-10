@@ -7,11 +7,12 @@ from phonenumber_field.modelfields import PhoneNumberField
 #     designation = models.CharField(max_length=50,default=MATIERE_PREMIERE)
     
 class RawMaterial(models.Model):
-    code = models.CharField(max_length=10, unique=True)
-    name = models.CharField(max_length=50)    
+    codeM = models.CharField(max_length=10, unique=True)
+    designation = models.CharField(max_length=50)
+    Qstock = models.CharField(max_length=10)    
 
 class Client(models.Model):
-    code = models.CharField(max_length=10, unique=True,auto_created=True)
+    code_cl = models.CharField(max_length=10, unique=True,auto_created=True)
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
     address = models.CharField(max_length=100)
@@ -19,7 +20,7 @@ class Client(models.Model):
     credit = models.FloatField()
 
 class Supplier(models.Model):
-    code = models.CharField(max_length=10, unique=True)
+    code_S = models.CharField(max_length=10, unique=True)
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
     address = models.CharField(max_length=100)
@@ -42,26 +43,28 @@ class Employee(models.Model):
 class Achat(models.Model):
     pur=models.CharField(auto_created=True, max_length=10)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
-    product = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
+    matiere = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     quantity = models.IntegerField()
     unit_price = models.FloatField()
+    reglement = models.FloatField()
 
 class Transfer(models.Model):
-    tr=models.CharField(auto_created=True, max_length=10)
+    num_tr=models.CharField(auto_created=True, max_length=10)
     date = models.DateField(auto_now_add=True,unique=True)
-    centre = models.ForeignKey(Centre, on_delete=models.CASCADE)
-    product = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
+    centre = models.ForeignKey(Centre)
+    matiere = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
-class Sale(models.Model):
+class Vente(models.Model):
+    num_vente=models.IntegerField(auto_created=True)
     sale=models.CharField(auto_created=True, max_length=10)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    ### TODO: verify if this is correct
+    quantity=models.IntegerField(max_length=10)
+    prix_U=models.floatField()
+    p_credits=models.models.FloatField()
+    client = models.ForeignKey(Client)
+    matiere=models.ForeignKey(RawMaterial)
     date = models.DateField(auto_now_add=True)
-    product = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-    unit_price = models.FloatField()
     
     
 class Stock(models.Model):
@@ -71,11 +74,26 @@ class Stock(models.Model):
     def __str__(self):
         return self.name
     
-class ReglementAchat(models.Model):
-    code=models.CharField(max_length=10,unique=True,auto_created=True)
-    numA=models.ForeignKey(Achat)
-    rigli=models.BooleanField(default=False)
-    restant=models.FloatField(max_length=10,null=False)
-    
+# class ReglementAchat(models.Model):
+#     code=models.CharField(max_length=10,unique=True,auto_created=True)
+#     numA=models.ForeignKey(Achat)
+#     rigli=models.BooleanField(default=False)
+#     restant=models.FloatField(max_length=10,null=False)
+class Product(models.Model):
+    Code_P=models.CharField(max_length=10,null=False,auto_created=True)
+    Desiginiation_P=models.CharField(max_length=10)
+    Quantity=models.IntegerField()
+    prix_Unit=models.IntegerField() 
+
+class Vente(models.Model):
+    num_V=models.IntegerField()
+    Date_v=models.DateField(auto_now_add=True)
+    quantity=models.IntegerField()
+    prix_Unit=models.FloatField()
+    p_credits=models.FloatField()
+    code_cl=models.ForeignKey(Client)
+    code_p=models.ForeignKey(Product)
+
+        
     
     
