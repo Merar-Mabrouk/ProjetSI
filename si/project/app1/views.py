@@ -1,135 +1,165 @@
-from django.shortcuts import render
-from django.shortcuts import render, redirect
-from .models import Client, Supplier, RawMaterial, Employee
+# views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Client, Supplier, Employee, RawMaterial, Achat, Sale, Stock, Centre
+
+def add_entity(request, entity_type):
+    if request.method == 'POST':
+        # Handle the common form data
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        address = request.POST.get('address')
+        phone = request.POST.get('phone')
+
+        # Entity-specific handling
+        if entity_type == 'client':
+            credit = request.POST.get('credit')
+            Client.objects.create(
+                first_name=first_name,
+                last_name=last_name,
+                address=address,
+                phone=phone,
+                credit=credit
+            )
+        elif entity_type == 'supplier':
+            balance = request.POST.get('balance')
+            Supplier.objects.create(
+                first_name=first_name,
+                last_name=last_name,
+                address=address,
+                phone=phone,
+                balance=balance
+            )
+        elif entity_type == 'employee':
+            daily_salary = request.POST.get('daily_salary')
+            centre_id = request.POST.get('centre')
+            centre = Centre.objects.get(id=centre_id)
+            Employee.objects.create(
+                first_name=first_name,
+                last_name=last_name,
+                address=address,
+                phone=phone,
+                daily_salary=daily_salary,
+                centre=centre
+            )
+        elif entity_type == 'raw_material':
+            RawMaterial.objects.create(
+                name=first_name,
+                code=last_name  # Assuming code is unique for raw materials
+            )
+
+        # Add more conditions for other entity types
+
+        return redirect('entity_list_page')  # Redirect to the entity list page
+
+    # Render the generic form template with entity_type and other necessary data
+    centres = Centre.objects.all()
+    return render(request, 'add_entity.html', {'entity_type': entity_type, 'centres': centres})
+
+def modify_entity(request, entity_type, entity_id):
+    # Fetch the entity instance based on entity_type and entity_id
+    model_class = {'client': Client, 'supplier': Supplier, 'employee': Employee, 'raw_material': RawMaterial}.get(entity_type, None)
+    if not model_class:
+        # Handle other entity types or raise an error as needed
+        return HttpResponseBadRequest("Invalid entity type")
+
+    entity = get_object_or_404(model_class, id=entity_id)
+
+    if request.method == 'POST':
+        # Handle modification
+        # Similar to add_entity, update the fields based on entity_type
+
+        entity.first_name = request.POST.get('first_name')
+        entity.last_name = request.POST.get('last_name')
+        entity.address = request.POST.get('address')
+        entity.phone = request.POST.get('phone')
+
+        if entity_type == 'client':
+            entity.credit = request.POST.get('credit')
+        elif entity_type == 'supplier':
+            entity.balance = request.POST.get('balance')
+        elif entity_type == 'employee':
+            entity.daily_salary = request.POST.get('daily_salary')
+            entity.centre_id = request.POST.get('centre')
+
+        entity.save()
+
+        return redirect('entity_list_page')  # Redirect to the entity list page
+
+    # Render the generic form template with entity_type, entity_id, and other necessary data
+    centres = Centre.objects.all()
+    return render(request, 'modify_entity.html', {'entity_type': entity_type, 'entity': entity, 'centres': centres})
+
+def delete_entity(request, entity_type, entity_id):
+    # Fetch the entity instance based on entity_type and entity_id
+    model_class = {'client': Client, 'supplier': Supplier, 'employee': Employee, 'raw_material': RawMaterial}.get(entity_type, None)
+    if not model_class:
+        # Handle other entity types or raise an error as needed
+        return HttpResponseBadRequest("Invalid entity type")
+
+    entity = get_object_or_404(model_class, id=entity_id)
+    entity.delete()
+
+    return redirect('entity_list_page')  # Redirect to the entity list page
+
 # Function to purchase a raw material
-def purchase_raw_material(request):
+def acheter_matiere_premiere(request):
     if request.method == 'POST':
         # Handle the form data and save the purchase record
         supplier_id = request.POST.get('supplier_id')
-        product_id = request.POST.get('product_id')
+        raw_material_id = request.POST.get('raw_material_id')
         quantity = request.POST.get('quantity')
         unit_price = request.POST.get('unit_price')
 
         supplier = Supplier.objects.get(id=supplier_id)
-        product = RawMaterial.objects.get(id=product_id)
+        raw_material = RawMaterial.objects.get(id=raw_material_id)
 
         Achat.objects.create(
             supplier=supplier,
-            product=product,
+            product=raw_material,
             quantity=quantity,
             unit_price=unit_price
         )
 
         # Update stock or perform any other necessary actions
+        stock, created = Stock.objects.get_or_create(name_P=raw_material)
+        stock.quantity += int(quantity)
+        stock.save()
 
         return redirect('purchase_success_page')  # Redirect to a success page
 
     # Render the purchase form
     suppliers = Supplier.objects.all()
-    products = RawMaterial.objects.all()
-    return render(request, 'purchase_raw_material.html', {'suppliers': suppliers, 'products': products})
+    raw_materials = RawMaterial.objects.all()
+    return render(request, 'acheter_matiere_premiere.html', {'suppliers': suppliers, 'raw_materials': raw_materials})
 
 # Function to sell a raw material
-def sell_raw_material(request):
+def vendre_matiere_premiere(request):
     if request.method == 'POST':
         # Handle the form data and save the sale record
         client_id = request.POST.get('client_id')
-        product_id = request.POST.get('product_id')
+        raw_material_id = request.POST.get('raw_material_id')
         quantity = request.POST.get('quantity')
         unit_price = request.POST.get('unit_price')
 
         client = Client.objects.get(id=client_id)
-        product = RawMaterial.objects.get(id=product_id)
+        raw_material = RawMaterial.objects.get(id=raw_material_id)
 
         Sale.objects.create(
             client=client,
-            product=product,
+            product=raw_material,
             quantity=quantity,
             unit_price=unit_price
         )
 
         # Update stock or perform any other necessary actions
+        stock, created = Stock.objects.get_or_create(name_P=raw_material)
+        stock.quantity -= int(quantity)
+        stock.save()
 
         return redirect('sale_success_page')  # Redirect to a success page
 
     # Render the sale form
     clients = Client.objects.all()
-    products = RawMaterial.objects.all()
-    return render(request, 'sell_raw_material.html', {'clients': clients, 'products': products})
-
-# Function to add a new client
-def add_client(request):
-    if request.method == 'POST':
-        # Handle the form data and save the new client
-        # Assuming you have a form with fields 'first_name', 'last_name', 'address', 'phone', 'credit'
-        Client.objects.create(
-            first_name=request.POST.get('first_name'),
-            last_name=request.POST.get('last_name'),
-            address=request.POST.get('address'),
-            phone=request.POST.get('phone'),
-            credit=request.POST.get('credit')
-        )
-        return redirect('client_list_page')  # Redirect to the client list page
-
-    # Render the form to add a new client
-    return render(request, 'add_client.html')
-
-# Function to remove a client
-def remove_client(request, client_id):
-    client = Client.objects.get(id=client_id)
-    client.delete()
-    return redirect('client_list_page')  # Redirect to the client list page
-
-# Similar functions for adding/removing suppliers, products, employees, etc.
-
-# Function to add a new supplier
-def add_supplier(request):
-    if request.method == 'POST':
-        # Handle the form data and save the new supplier
-        # Assuming you have a form with fields 'first_name', 'last_name', 'address', 'phone', 'balance'
-        Supplier.objects.create(
-            first_name=request.POST.get('first_name'),
-            last_name=request.POST.get('last_name'),
-            address=request.POST.get('address'),
-            phone=request.POST.get('phone'),
-            balance=request.POST.get('balance')
-        )
-        return redirect('supplier_list_page')  # Redirect to the supplier list page
-
-    # Render the form to add a new supplier
-    return render(request, 'add_supplier.html')
-
-# Function to remove a supplier
-def remove_supplier(request, supplier_id):
-    supplier = Supplier.objects.get(id=supplier_id)
-    supplier.delete()
-    return redirect('supplier_list_page')  # Redirect to the supplier list page
-
-# Similar functions for adding/removing products, employees, etc.
-
-# Function to add a new employee
-def add_employee(request):
-    if request.method == 'POST':
-        # Handle the form data and save the new employee
-        # Assuming you have a form with fields 'first_name', 'last_name', 'address', 'phone', 'daily_salary', 'centre'
-        Employee.objects.create(
-            first_name=request.POST.get('first_name'),
-            last_name=request.POST.get('last_name'),
-            address=request.POST.get('address'),
-            phone=request.POST.get('phone'),
-            daily_salary=request.POST.get('daily_salary'),
-            centre=request.POST.get('centre')
-        )
-        return redirect('employee_list_page')  # Redirect to the employee list page
-
-    # Render the form to add a new employee
-    return render(request, 'add_employee.html')
-
-# Function to remove an employee
-def remove_employee(request, employee_id):
-    employee = Employee.objects.get(id=employee_id)
-    employee.delete()
-    return redirect('employee_list_page')  # Redirect to the employee list page
-
-# Similarly, you can continue to implement functions for other operations and create corresponding HTML templates for the forms and list pages.
-
+    raw_materials = RawMaterial.objects.all()
+    return render(request, 'vendre_matiere_premiere.html', {'clients': clients, 'raw_materials': raw_materials})
