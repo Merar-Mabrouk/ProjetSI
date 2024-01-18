@@ -1,6 +1,7 @@
     
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from datetime import datetime
 
 # class Product(models.Model):
 #     code = models.CharField(max_length=10, unique=True,auto_created=True)
@@ -44,14 +45,14 @@ class Achat(models.Model):
     pur=models.CharField(auto_created=True, max_length=10)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     matiere = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
     quantity = models.IntegerField()
     unit_price = models.FloatField()
     reglement = models.FloatField()
 
 class Transfer(models.Model):
     num_tr=models.CharField(auto_created=True, max_length=10)
-    date = models.DateField(auto_now_add=True,unique=True)
+    date = models.DateTimeField(auto_now_add=True,unique=True)
     centre = models.ForeignKey(Centre)
     matiere = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
     quantity = models.IntegerField()
@@ -64,7 +65,7 @@ class Vente(models.Model):
     p_credits=models.models.FloatField()
     client = models.ForeignKey(Client)
     matiere=models.ForeignKey(RawMaterial)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
     
     
 class Stock(models.Model):
@@ -87,7 +88,7 @@ class Product(models.Model):
 
 class Vente(models.Model):
     num_V=models.IntegerField()
-    Date_v=models.DateField(auto_now_add=True)
+    Date_v=models.DateTimeField(auto_now_add=True)
     quantity=models.IntegerField()
     prix_Unit=models.FloatField()
     p_credits=models.FloatField()
@@ -104,7 +105,7 @@ class Employe(models.Model):
     fk_Code_CE = models.CharField(max_length=20)  # Assurez-vous que le type correspond au type de la clé étrangère dans votre modèle Code_CE
 
 class PV(models.Model):
-    Date_PV = models.DateField(primary_key=True)
+    Date_PV = models.DateTimeField(primary_key=True)
     Text = models.TextField()
 
 class EnRapport(models.Model):
@@ -117,12 +118,12 @@ class Doit(models.Model):
 
 class Pointage(models.Model):
     Num_P = models.AutoField(primary_key=True)
-    Date_P = models.DateField()
+    Date_P = models.DateTimeField()
     Pointe = models.BooleanField()
 
 class MASSROUF(models.Model):
     Num_MAS = models.AutoField(primary_key=True)
-    Date_M = models.DateField()
+    Date_M = models.DateTimeField()
     Credit = models.DecimalField(max_digits=10, decimal_places=2)
     fk_Code
     

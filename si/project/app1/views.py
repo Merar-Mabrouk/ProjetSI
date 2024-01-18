@@ -2,60 +2,90 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Client, Supplier, Employee, RawMaterial, Achat, Sale, Stock, Centre
-
-def add_entity(request, entity_type):
-    if request.method == 'POST':
-        # Handle the common form data
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        address = request.POST.get('address')
-        phone = request.POST.get('phone')
-
-        # Entity-specific handling
-        if entity_type == 'client':
-            credit = request.POST.get('credit')
-            Client.objects.create(
-                first_name=first_name,
-                last_name=last_name,
-                address=address,
-                phone=phone,
-                credit=credit
-            )
-        elif entity_type == 'supplier':
-            balance = request.POST.get('balance')
-            Supplier.objects.create(
-                first_name=first_name,
-                last_name=last_name,
-                address=address,
-                phone=phone,
-                balance=balance
-            )
-        elif entity_type == 'employee':
-            daily_salary = request.POST.get('daily_salary')
-            centre_id = request.POST.get('centre')
-            centre = Centre.objects.get(id=centre_id)
-            Employee.objects.create(
-                first_name=first_name,
-                last_name=last_name,
-                address=address,
-                phone=phone,
-                daily_salary=daily_salary,
-                centre=centre
-            )
-        elif entity_type == 'raw_material':
-            RawMaterial.objects.create(
-                name=first_name,
-                code=last_name  # Assuming code is unique for raw materials
-            )
-
-        # Add more conditions for other entity types
-
-        return redirect('entity_list_page')  # Redirect to the entity list page
-
-    # Render the generic form template with entity_type and other necessary data
-    centres = Centre.objects.all()
-    return render(request, 'add_entity.html', {'entity_type': entity_type, 'centres': centres})
-
+from .forms import *
+def add_client(request):
+    if(request.method =='POST'):
+        form=ClientForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
+            form=ClientForm()
+            msg="the new client is successfully added"
+            return render(request,"Client.html",{'form':form,'Message':message})
+        else:
+            form=ClientForm()
+            msg="add a client"
+            return render(request,"Client.html",{'form':form,'Message':message})
+            
+def add_supplier(request):
+    if(request.method =='POST'):
+        form=SupplierForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
+            form=SupplierForm()
+            msg="the new Supplier is successfully added"
+            return render(request,"Supplier.html",{'form':form,'Message':message})
+        else:
+            form=SupplierForm()
+            msg="add a Supplier"
+            return render(request,"Supplier.html",{'form':form,'Message':message})
+def add_rawMaterial(request):
+    if(request.method =='POST'):
+        form=RawForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
+            form=RawForm()
+            msg="the new Material is successfully added"
+            return render(request,"Raw.html",{'form':form,'Message':message})
+        else:
+            form=RawForm()
+            msg="add a Material"
+            return render(request,"Raw.html",{'form':form,'Message':message})
+def add_achat(request):
+    if(request.method =='POST'):
+        form=AchatForm(request.POST)
+        clients=Client.objects.all()
+        RawMaterials=RawMaterial.objects.all()
+        if form.is_valid():
+            form.save()
+            form=AchatForm()
+            msg="the new transaction is successfully added"
+            return render(request,"achat.html",{'form':form,'Message':message,'clients':Client,'Raw':RawMaterials})
+        else:
+            form=AchatForm()
+            msg="add a transaction"
+            return render(request,"achat.html",{'form':form,'Message':message,'clients':Client,'Raw':RawMaterials})
+def add_vente(request):
+    if(request.method =='POST'):
+        form=VenteForm(request.POST)
+        clients=Client.objects.all()
+        RawMaterials=RawMaterial.objects.all()
+        if form.is_valid():
+            form.save()
+            form=VenteForm()
+            msg="the new Vente is successfully added"
+            return render(request,"vente.html",{'form':form,'Message':message,'clients':Client,'Raw':RawMaterials})
+        else:
+            form=VenteForm()
+            msg="add a Vente"
+            return render(request,"vente.html",{'form':form,'Message':message,'clients':Client,'Raw':RawMaterials})
+def add_transfer(request):
+    if(request.method =='POST'):
+        form=TransferForm(request.POST)
+        centres=Centre.objects.all()
+        RawMaterials=RawMaterial.objects.all()
+        if form.is_valid():
+            form.save()
+            form=TransferForm()
+            msg="the new Vente is successfully added"
+            return render(request,"transfer.html",{'form':form,'Message':message,'center':centres,'Raw':RawMaterials})
+        else:
+            form=TransferForm()
+            msg="add a Vente"
+            return render(request,"transfer.html",{'form':form,'Message':message,'center':centres,'Raw':RawMaterials})
+        
 def modify_entity(request, entity_type, entity_id):
     # Fetch the entity instance based on entity_type and entity_id
     model_class = {'client': Client, 'supplier': Supplier, 'employee': Employee, 'raw_material': RawMaterial}.get(entity_type, None)
