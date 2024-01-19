@@ -4,7 +4,7 @@
     <title>HTML Page</title>
     <style>
         body {
-            background-image: url('C:/Users/Hmed/Downloads/html/Background.svg'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+            background-image: url('C:/Users/Hmed/Desktop/ProjetSI/si/project/app1/templates/Background.svg'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
             background-size: cover; /* This will make sure the background image covers the entire viewport */
             background-repeat: no-repeat; /* Prevent the background image from repeating */
             font-family: Arial, sans-serif; /* Choose an appropriate font */
@@ -87,6 +87,8 @@ input::placeholder {
                     newFloatInput.id = 'float2';
                     newFloatInput.name = 'float2';
                     newFloatInput.placeholder = 'Prix à donner en avance';
+                    newFloatInput.value = '0'; // Set default value to 0
+                    newFloatInput.value = '0'; // Set default value to 0
 
                     float2InputContainer.appendChild(newLabel);
                     // Append the new float input to the container
@@ -111,10 +113,13 @@ function updateOutput() {
     var floatInput = document.getElementById('float').value;
     var float2Input = document.getElementById('float2') ? document.getElementById('float2').value : 0; // Default to 0 if not present
     var outputField = document.getElementById('output');
+    var outputField2 = document.getElementById('output2');
     
     // Calculate the product and update the output field
     var result = parseFloat(integerInput) * parseFloat(floatInput)
     outputField.value = result.toFixed(2); // Display the result with two decimal places
+    var result2 = parseFloat(integerInput) * parseFloat(floatInput) - parseFloat(float2Input)
+    outputField2.value = result2.toFixed(2); // Display the result with two decimal places
 }
 
             // Attach the handleCheckboxChange function to the checkbox change event
@@ -128,23 +133,20 @@ function updateOutput() {
 </head>
 <body>
     <h1 style="text-align:center; color:rgba(255, 255, 255, 0.849)">Paiement</h1>
-    <form>
+    <form method="POST" action="{% url 'add_achat' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
         <label for="search">Fournisseur:</label>
-        <input type="text" id="search" name="search" placeholder="Entrez le nom du fournisseur"><br><br>
+        <input type="text" id="search" name="search" placeholder="Entrez le nom du fournisseur..."><br><br>
 
         <label for="search2">Matière première:</label>
-        <input type="text" id="search2" name="search2" placeholder="Entrez la matière première"><br><br>
+        <input type="text" id="search2" name="search2" placeholder="Entrez la matière première..."><br><br>
         
-        <label for="integer">Qte:</label>
-        <input type="number" id="integer" name="integer" placeholder="Entrez la quantité"><br><br>
-        
-        <label for="float">Prix Unitaire:</label>
-        <input type="number" step="0.01" id="float" name="float" placeholder="Entrez le prix unitaire"><br><br>
+        <input type="number" id="integer" name="integer" placeholder="Entrez la quantité..."  min="0"><br><br>
+        <input type="number" step="0.01" id="float" name="float" placeholder="Entrez le prix unitaire..."  min="0"><br><br>
 
         <!-- Container for the dynamically added float input below the checkbox -->
 
-        <label for="output">Prix à payer:</label>
-        <input type="text" id="output" name="output" readonly><br><br>
         
         <label for="checkbox">Paiement partiel:</label>
         <input type="checkbox" id="checkbox" name="checkbox"><br><br>
@@ -152,8 +154,16 @@ function updateOutput() {
         <div id="float2InputContainer"></div>
 <br> 
 <br>
+        <label for="output2" style="display: none;">Prix restant:</label>
+        <input type="text" id="output2" name="output2" readonly style="display: none;"><br><br>
+
         <input type="submit" value="Payer">
 
     </form>
+
+    <div style="position: absolute; right: 310px;">
+        <label for="output">Prix à payer:</label>
+        <input type="text" id="output" name="output" readonly><br><br>
+    </div>
 </body>
 </html>

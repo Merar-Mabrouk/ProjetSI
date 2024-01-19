@@ -52,7 +52,6 @@ def add_achat(request):
         if form.is_valid():
             form.save()
             idM=form.cleaned_data['matiere']
-            regle=form.cleaned_data['']
             caseM="add"
             quant=form.cleaned_data['quantity']
             modify_raw_by_id(idM=idM,case=caseM,quant=quant)
