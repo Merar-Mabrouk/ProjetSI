@@ -47,21 +47,25 @@ def add_rawMaterial(request):
 def add_achat(request):
     if(request.method =='POST'):
         form=AchatForm(request.POST)
-        clients=Client.objects.all()
+        suppliers=Supplier.objects.all()
         RawMaterials=RawMaterial.objects.all()
         if form.is_valid():
             form.save()
             idM=form.cleaned_data['matiere']
+            regle=form.cleaned_data['']
             caseM="add"
             quant=form.cleaned_data['quantity']
             modify_raw_by_id(idM=idM,case=caseM,quant=quant)
+            idS=form.cleaned_data['supplier']
+            reg=form.cleaned_data['reglement']
+            regler_supplier(pk=idS,somme=reg,cond='add')
             form=AchatForm()
             msg="the new transaction is successfully added"
-            return render(request,"achat.html",{'form':form,'Message':message,'clients':Client,'Raw':RawMaterials})
+            return render(request,"achat.html",{'form':form,'Message':message,'supp':suppliers,'Raw':RawMaterials})
         else:
             form=AchatForm()
             msg="add a transaction"
-            return render(request,"achat.html",{'form':form,'Message':message,'clients':Client,'Raw':RawMaterials})
+            return render(request,"achat.html",{'form':form,'Message':message,'supp':suppliers,'Raw':RawMaterials})
 def add_vente(request):
     if(request.method =='POST'):
         form=VenteForm(request.POST)
@@ -72,6 +76,9 @@ def add_vente(request):
             caseM="remove"
             quant=form.cleaned_data['quantity']
             if(modify_raw_by_id(idM=idM,case=caseM,quant=quant)):
+                idS=form.cleaned_data['client']
+                reg=form.cleaned_data['p_credits']
+                regler_client(pk=idS,somme=reg,cond='add')
                 form.save()
                 form=TransferForm()
                 msg="the new Vente is successfully added"
@@ -103,6 +110,8 @@ def add_transfer(request):
             msg="add a Vente"
             return render(request,"transfer.html",{'form':form,'Message':message,'center':centres,'Raw':RawMaterials})
 
+
+### here are the modifications ###
 def modify_client(request,pk):
     client=Client.objects.get(id=pk)
     if(request=='POST'):
@@ -118,13 +127,80 @@ def modify_supplier(request,pk):
     supp=Supplier.objects.get(id=pk)
     if(request=='POST'):
         form=suppForm(request.POST,instance=supp)
-        form.save()
-        return redirect(listSupplier)
+        if form.is_valid():
+            form.save()
+            return redirect(listSupplier)
     else:
         form=ClientForm()        
         return render(request,modifySupplier,{'form':form,})
     
+def regler_vente(request,pk):
+    vente=Vente.objects.get(id=pk)
+    if(request=='POST'):
+        form=VenteRForm(request.POST,instance=vente)
+        if form.is_valid():
+            cred=form.cleaned_data['p_credits']
+            if(vente.p_credits<cred):
+                msg="the money added is too much"
+                form=VenteRForm()
+                return render(request,regletVente,{'form':form, 'vente':vente})
+            else:
+                idS=form.cleaned_data['client']
+                reg=form.cleaned_data['p_credits']
+                regler_supplier(pk=idS,somme=reg,cond='regler')
+                form.save()
+                msg="the cut was added successfully"
+                return redirect(listVente)
+                
+        else:
+            form=VenteRForm()
+            msg="regler la vente"
+            return render(request,regletVente,{'form':form, 'vente':vente})
+    
+def regler_Achat(request,pk):
+    achat=Achat.objects.get(id=pk)
+    if(request=='POST'):
+        form=AchatRForm(request.POST,instance=achat)
+        if form.is_valid():
+            cred=form.cleaned_data['reglement']
+            if(achat.reglement<cred):
+                msg="the money added is too much"
+                form=AchatRForm()
+                return render(request,regletAchat,{'form':form, 'achat':achat})
+            else:
+                form.save()
+                idS=form.cleaned_data['supplier']
+                reg=form.cleaned_data['reglement']
+                regler_supplier(pk=idS,somme=reg,cond='regler')
+                msg="the cut was added successfully"
+                return redirect(listAchat)
+                
+        else:
+            form=AchatRForm()
+            msg="regler l'Achat"
+            return render(request,regletAchat,{'form':form, 'achat':achat})
+    
+### here u find the deleting stuff ###    
+            
+### here we find functions that are to be used in other one.. ###            
 
+def regler_client(pk, somme, cond):
+    client=Client.objects.get(id=pk)
+    if cond=="regler":
+        client.credit=client.credit-somme
+    else:
+        client.credit=client.credit+somme
+    client.save()
+    return True
+
+def regler_supplier(pk, somme, cond):
+    supplier=Supplier.objects.get(id=pk)
+    if cond=="regler":
+        supplier.credit=supplier.credit-somme
+    else:
+        supplier.credit=supplier.credit+somme
+    supplier.save()
+    return True
 
 def modify_raw_by_id(idM, case,count):
     raw=RawMaterials.objects.get(id=idM)

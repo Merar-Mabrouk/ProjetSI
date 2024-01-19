@@ -33,3 +33,12 @@ class TransferForm(forms.ModelForm):
         fields='__all__'
         
         
+class AchatRForm(forms.ModelForm):
+    class Meta:
+        model = Achat
+        fields = ['reglement']
+        
+class VenteRForm(forms.ModelForm):
+    class Meta:
+        model = Vente
+        fields = ['p_credits']

@@ -16,3 +16,7 @@ listSupplier="SupplierList.html"
 listAchat="AchatList.html"
 listVente="VenteList.html"
 listTransfer="TransferList.html"
+
+#### here are the reglement part ####
+regletAchat="AchatRegler.html"
+regletVente="VenteRegler.html"

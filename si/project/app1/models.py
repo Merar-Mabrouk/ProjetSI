@@ -39,7 +39,7 @@ class Employee(models.Model):
     address = models.CharField(max_length=100)
     phone = PhoneNumberField()
     daily_salary = models.FloatField()
-    centre = models.ForeignKey(Centre, on_delete=models.CASCADE)
+    centre = models.ForeignKey(Centre)
 
 class Achat(models.Model):
     pur=models.CharField(auto_created=True, max_length=10)
@@ -54,7 +54,7 @@ class Transfer(models.Model):
     num_tr=models.CharField(auto_created=True, max_length=10)
     date = models.DateTimeField(auto_now_add=True,unique=True)
     centre = models.ForeignKey(Centre)
-    matiere = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
+    matiere = models.ForeignKey(RawMaterial)
     quantity = models.IntegerField()
 
 class Vente(models.Model):
@@ -70,7 +70,7 @@ class Vente(models.Model):
     
 class Stock(models.Model):
     code=models.CharField(max_length=10,unique=True,auto_created=True)
-    name_P=models.ForeignKey(RawMaterial,on_delete=models.CASCADE)
+    name_P=models.ForeignKey(RawMaterial)
     quantity=models.IntegerField()
     def __str__(self):
         return self.name_p
@@ -86,7 +86,7 @@ class Product(models.Model):
     Quantity=models.IntegerField()
     prix_Unit=models.IntegerField() 
 
-class Vente(models.Model):
+class VenteP(models.Model):
     num_V=models.IntegerField()
     Date_v=models.DateTimeField(auto_now_add=True)
     quantity=models.IntegerField()
@@ -126,4 +126,4 @@ class MASSROUF(models.Model):
     Date_M = models.DateTimeField()
     Credit = models.DecimalField(max_digits=10, decimal_places=2)
     fk_Code
-    
+  
