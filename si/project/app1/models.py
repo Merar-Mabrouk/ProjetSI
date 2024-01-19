@@ -73,7 +73,7 @@ class Stock(models.Model):
     name_P=models.ForeignKey(RawMaterial,on_delete=models.CASCADE)
     quantity=models.IntegerField()
     def __str__(self):
-        return self.name
+        return self.name_p
     
 # class ReglementAchat(models.Model):
 #     code=models.CharField(max_length=10,unique=True,auto_created=True)

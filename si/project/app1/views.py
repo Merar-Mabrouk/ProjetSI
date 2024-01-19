@@ -50,6 +50,10 @@ def add_achat(request):
         RawMaterials=RawMaterial.objects.all()
         if form.is_valid():
             form.save()
+            idM=form.cleaned_data['matiere']
+            caseM="add"
+            quant=form.cleaned_data['quantity']
+            modify_raw_by_id(idM=idM,case=caseM,quant=quant)
             form=AchatForm()
             msg="the new transaction is successfully added"
             return render(request,"achat.html",{'form':form,'Message':message,'clients':Client,'Raw':RawMaterials})
@@ -63,9 +67,15 @@ def add_vente(request):
         clients=Client.objects.all()
         RawMaterials=RawMaterial.objects.all()
         if form.is_valid():
-            form.save()
-            form=VenteForm()
-            msg="the new Vente is successfully added"
+            idM=form.cleaned_data['matiere']
+            caseM="remove"
+            quant=form.cleaned_data['quantity']
+            if(modify_raw_by_id(idM=idM,case=caseM,quant=quant)):
+                form.save()
+                form=TransferForm()
+                msg="the new Vente is successfully added"
+            else:
+                msg="the quantity u are trying to sell is superior to what u have"  
             return render(request,"vente.html",{'form':form,'Message':message,'clients':Client,'Raw':RawMaterials})
         else:
             form=VenteForm()
@@ -77,15 +87,38 @@ def add_transfer(request):
         centres=Centre.objects.all()
         RawMaterials=RawMaterial.objects.all()
         if form.is_valid():
-            form.save()
-            form=TransferForm()
-            msg="the new Vente is successfully added"
+            idM=form.cleaned_data['matiere']
+            caseM="remove"
+            quant=form.cleaned_data['quantity']
+            if(modify_raw_by_id(idM=idM,case=caseM,quant=quant)):
+                form.save()
+                form=TransferForm()
+                msg="the new Vente is successfully added"
+            else:
+                msg="the quantity u are trying to transfer is superior to what u have"                    
             return render(request,"transfer.html",{'form':form,'Message':message,'center':centres,'Raw':RawMaterials})
         else:
             form=TransferForm()
             msg="add a Vente"
             return render(request,"transfer.html",{'form':form,'Message':message,'center':centres,'Raw':RawMaterials})
+
+
+
+def modify_raw_by_id(idM, case,count):
+    raw=RawMaterials.objects.get(id=idM)
+    if(case == "add"):
+        raw.Qstock= raw.Qstock+ count
+    else:
+        if(raw.Qstock<count):
+            return False
+        raw.Qstock= raw.Qstock - count
+    raw.save()
+    return True
+
         
+        
+            
+            
 def modify_entity(request, entity_type, entity_id):
     # Fetch the entity instance based on entity_type and entity_id
     model_class = {'client': Client, 'supplier': Supplier, 'employee': Employee, 'raw_material': RawMaterial}.get(entity_type, None)
