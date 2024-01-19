@@ -3,6 +3,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Client, Supplier, Employee, RawMaterial, Achat, Sale, Stock, Centre
 from .forms import *
+from .data import *
 def add_client(request):
     if(request.method =='POST'):
         form=ClientForm(request.POST)
@@ -102,6 +103,27 @@ def add_transfer(request):
             msg="add a Vente"
             return render(request,"transfer.html",{'form':form,'Message':message,'center':centres,'Raw':RawMaterials})
 
+def modify_client(request,pk):
+    client=Client.objects.get(id=pk)
+    if(request=='POST'):
+        form=clientForm(request.POST,instance=client)
+        if form.is_valid():
+            form.save()
+            return redirect(listClient)
+    else:
+        form=ClientForm()        
+        return render(request,"clientM.html",{'form':form,})
+    
+def modify_supplier(request,pk):
+    supp=Supplier.objects.get(id=pk)
+    if(request=='POST'):
+        form=suppForm(request.POST,instance=supp)
+        form.save()
+        return redirect(listSupplier)
+    else:
+        form=ClientForm()        
+        return render(request,modifySupplier,{'form':form,})
+    
 
 
 def modify_raw_by_id(idM, case,count):
