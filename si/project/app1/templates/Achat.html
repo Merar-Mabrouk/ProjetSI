@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTML Page</title>
+    <style>
+        body {
+            background-image: url('C:/Users/Hmed/Downloads/html/Background.svg'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+            background-size: cover; /* This will make sure the background image covers the entire viewport */
+            background-repeat: no-repeat; /* Prevent the background image from repeating */
+            font-family: Arial, sans-serif; /* Choose an appropriate font */
+            color: #d5d5d5; /* Set text color */
+        }
+        form {
+            /* Add additional styling for the form if needed */
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Hide the overflow caused by the blur effect */
+        }
+        
+        form::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(26, 36, 69, 0.267); /* Set a semi-transparent background for better readability */
+            backdrop-filter: blur(3px); /* Add blur effect */
+            z-index: -1; /* Place the pseudo-element behind the form content */
+        }
+
+        input[type="submit"] {
+            margin-left: 500px;
+            background-color: #53af4c; /* Green background color */
+            color: white; /* White text color */
+            padding: 10px 20px; /* Padding for better appearance */
+            border: none; /* Remove border */
+            border-radius: 30px; /* Add a slight border radius */
+            cursor: pointer; /* Change cursor to pointer on hover */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        input[type="number"],
+input[type="text"] {
+    border-radius: 30px;
+    padding: 10px;
+    width: 300px;
+    margin: 5px;
+    border: 0ch;
+    background-color: #ffffff28;
+    color: #d5d5d5;
+}
+
+input::placeholder {
+    font-size: 12px; /* Adjust this value to your liking */
+}
+
+#search::placeholder {
+    font-size: 12px; /* Adjust this value to your liking */
+}
+
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to handle checkbox change
+            function handleCheckboxChange() {
+                var checkbox = document.getElementById('checkbox');
+                var float2InputContainer = document.getElementById('float2InputContainer');
+
+                // Check if the checkbox is checked
+                if (checkbox.checked) {
+                           // If checked, create a new label
+                var newLabel = document.createElement('label');
+                newLabel.for = 'float2';
+                newLabel.textContent = 'Prix à donner en avance:';
+                    // If checked, create a new float input
+                    var newFloatInput = document.createElement('input');
+                    newFloatInput.type = 'number';
+                    newFloatInput.step = '0.01';
+                    newFloatInput.id = 'float2';
+                    newFloatInput.name = 'float2';
+                    newFloatInput.placeholder = 'Prix à donner en avance';
+
+                    float2InputContainer.appendChild(newLabel);
+                    // Append the new float input to the container
+                    float2InputContainer.appendChild(newFloatInput);
+
+                    // Attach the updateOutput function to the new float input
+                    
+                    newFloatInput.addEventListener('input', updateOutput);
+                } else {
+                    // If not checked, remove the existing float input
+                    float2InputContainer.innerHTML = '';
+                }
+
+                // Update output when the checkbox changes
+                updateOutput();
+            }
+
+            // Function to calculate and update the output field
+            // Function to calculate and update the output field
+function updateOutput() {
+    var integerInput = document.getElementById('integer').value;
+    var floatInput = document.getElementById('float').value;
+    var float2Input = document.getElementById('float2') ? document.getElementById('float2').value : 0; // Default to 0 if not present
+    var outputField = document.getElementById('output');
+    
+    // Calculate the product and update the output field
+    var result = parseFloat(integerInput) * parseFloat(floatInput)
+    outputField.value = result.toFixed(2); // Display the result with two decimal places
+}
+
+            // Attach the handleCheckboxChange function to the checkbox change event
+            document.getElementById('checkbox').addEventListener('change', handleCheckboxChange);
+
+            // Attach the updateOutput function to the input events of integer and float fields
+            document.getElementById('integer').addEventListener('input', updateOutput);
+            document.getElementById('float').addEventListener('input', updateOutput);
+        });
+    </script>
+</head>
+<body>
+    <h1 style="text-align:center; color:rgba(255, 255, 255, 0.849)">Paiement</h1>
+    <form>
+        <label for="search">Fournisseur:</label>
+        <input type="text" id="search" name="search" placeholder="Entrez le nom du fournisseur"><br><br>
+
+        <label for="search2">Matière première:</label>
+        <input type="text" id="search2" name="search2" placeholder="Entrez la matière première"><br><br>
+        
+        <label for="integer">Qte:</label>
+        <input type="number" id="integer" name="integer" placeholder="Entrez la quantité"><br><br>
+        
+        <label for="float">Prix Unitaire:</label>
+        <input type="number" step="0.01" id="float" name="float" placeholder="Entrez le prix unitaire"><br><br>
+
+        <!-- Container for the dynamically added float input below the checkbox -->
+
+        <label for="output">Prix à payer:</label>
+        <input type="text" id="output" name="output" readonly><br><br>
+        
+        <label for="checkbox">Paiement partiel:</label>
+        <input type="checkbox" id="checkbox" name="checkbox"><br><br>
+        
+        <div id="float2InputContainer"></div>
+<br> 
+<br>
+        <input type="submit" value="Payer">
+
+    </form>
+</body>
+</html>
