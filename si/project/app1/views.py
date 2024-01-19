@@ -1,7 +1,7 @@
 # views.py
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Client, Supplier, Employee, RawMaterial, Achat, Sale, Stock, Centre
+from .models import *
 from .forms import *
 from .data import *
 def add_client(request):
