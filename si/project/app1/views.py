@@ -205,7 +205,7 @@ def regler_Achat(request,pk):
 ### here we find functions that are to be used in other one.. ###            
 
 def regler_client(pk, somme, cond):
-    client=Client.objects.get(id=pk)
+    client=pk
     if cond=="regler":
         client.credit=client.credit-somme
     else:
