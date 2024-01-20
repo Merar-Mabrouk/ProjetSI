@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HTML Page</title>
+    <title>{{ Message }}</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css">
     <style>
         body {
-            background-image: url('C:/Users/Hmed/Desktop/ProjetSI/si/project/app1/templates/Background.svg'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
-            background-size: cover; /* This will make sure the background image covers the entire viewport */
-            background-repeat: no-repeat; /* Prevent the background image from repeating */
-            font-family: Arial, sans-serif; /* Choose an appropriate font */
-            color: #d5d5d5; /* Set text color */
+            background-image: url("https://cdn.svgator.com/images/2022/06/use-svg-as-background-image-particle-strokes.svg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            color: #d5d5d5;
         }
+        
         form {
-            /* Add additional styling for the form if needed */
             position: relative;
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
             border-radius: 30px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden; /* Hide the overflow caused by the blur effect */
+            overflow: hidden;
         }
         
         form::before {
@@ -28,142 +29,212 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(26, 36, 69, 0.267); /* Set a semi-transparent background for better readability */
-            backdrop-filter: blur(3px); /* Add blur effect */
-            z-index: -1; /* Place the pseudo-element behind the form content */
+            background-color: rgba(26, 36, 69, 0.267);
+            backdrop-filter: blur(3px);
+            z-index: -1;
         }
 
         input[type="submit"] {
-            margin-left: 500px;
-            background-color: #53af4c; /* Green background color */
-            color: white; /* White text color */
-            padding: 10px 20px; /* Padding for better appearance */
-            border: none; /* Remove border */
-            border-radius: 30px; /* Add a slight border radius */
-            cursor: pointer; /* Change cursor to pointer on hover */
+            background-color: #53af4c;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            padding: 10px 20px;
+            font-size: 14px;
+            margin-left: 490px; /* This will push the button to the right */
         }
-
+        
         input[type="submit"]:hover {
-            background-color: #45a049; /* Darker green on hover */
+            background-color: #45a049;
+        }
+        
+
+        
+        /* General input styling for input and select elements */
+        input:not([type="submit"]),
+        select {
+            border-radius: 30px;
+            padding: 10px;
+            width: 100%;
+            margin: 5px;
+            border: 0;
+            background-color: #ffffff28;
+            color: #d5d5d5;
         }
 
-        input[type="number"],
-input[type="text"] {
-    border-radius: 30px;
-    padding: 10px;
-    width: 300px;
-    margin: 5px;
-    border: 0ch;
-    background-color: #ffffff28;
-    color: #d5d5d5;
+        
+
+/* Placeholder styling for input and select elements */
+input::placeholder,
+select::placeholder {
+    font-size: 12px;
 }
 
-input::placeholder {
-    font-size: 12px; /* Adjust this value to your liking */
+/* Specific styling for raw material and supplier inputs */
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select {
+    width: 300px; /* Adjust width as needed */
 }
 
-#search::placeholder {
-    font-size: 12px; /* Adjust this value to your liking */
+/* Adjust margin or any other specific styles if needed */
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select {
+    margin: 5px; /* Add or adjust margin as needed */
 }
 
+
+        .select2-container {
+            width: 100% !important;
+        }
     </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Function to handle checkbox change
-            function handleCheckboxChange() {
-                var checkbox = document.getElementById('checkbox');
-                var float2InputContainer = document.getElementById('float2InputContainer');
-
-                // Check if the checkbox is checked
-                if (checkbox.checked) {
-                           // If checked, create a new label
-                var newLabel = document.createElement('label');
-                newLabel.for = 'float2';
-                newLabel.textContent = 'Prix à donner en avance:';
-                    // If checked, create a new float input
-                    var newFloatInput = document.createElement('input');
-                    newFloatInput.type = 'number';
-                    newFloatInput.step = '0.01';
-                    newFloatInput.id = 'float2';
-                    newFloatInput.name = 'float2';
-                    newFloatInput.placeholder = 'Prix à donner en avance';
-                    newFloatInput.value = '0'; // Set default value to 0
-                    newFloatInput.value = '0'; // Set default value to 0
-
-                    float2InputContainer.appendChild(newLabel);
-                    // Append the new float input to the container
-                    float2InputContainer.appendChild(newFloatInput);
-
-                    // Attach the updateOutput function to the new float input
-                    
-                    newFloatInput.addEventListener('input', updateOutput);
-                } else {
-                    // If not checked, remove the existing float input
-                    float2InputContainer.innerHTML = '';
-                }
-
-                // Update output when the checkbox changes
-                updateOutput();
-            }
-
-            // Function to calculate and update the output field
-            // Function to calculate and update the output field
-function updateOutput() {
-    var integerInput = document.getElementById('integer').value;
-    var floatInput = document.getElementById('float').value;
-    var float2Input = document.getElementById('float2') ? document.getElementById('float2').value : 0; // Default to 0 if not present
-    var outputField = document.getElementById('output');
-    var outputField2 = document.getElementById('output2');
-    
-    // Calculate the product and update the output field
-    var result = parseFloat(integerInput) * parseFloat(floatInput)
-    outputField.value = result.toFixed(2); // Display the result with two decimal places
-    var result2 = parseFloat(integerInput) * parseFloat(floatInput) - parseFloat(float2Input)
-    outputField2.value = result2.toFixed(2); // Display the result with two decimal places
-}
-
-            // Attach the handleCheckboxChange function to the checkbox change event
-            document.getElementById('checkbox').addEventListener('change', handleCheckboxChange);
-
-            // Attach the updateOutput function to the input events of integer and float fields
-            document.getElementById('integer').addEventListener('input', updateOutput);
-            document.getElementById('float').addEventListener('input', updateOutput);
-        });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
 </head>
 <body>
     <h1 style="text-align:center; color:rgba(255, 255, 255, 0.849)">Paiement</h1>
-    <form method="POST" action="{% url 'add_achat' %}">
+    <form action="" method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <label for="search">Fournisseur:</label>
-        <input type="text" id="search" name="search" placeholder="Entrez le nom du fournisseur..."><br><br>
+        <!-- Achat Model Fields -->
+        <div class="form-group">
+            <label for="id_supplier">Supplier:<br></label>
+            {{ form.supplier }}
+            <script>
+                $('#id_supplier').attr('placeholder', 'Enter supplier');
+            </script>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="id_matiere">Raw Material:</label>
+            <br>
+            {{ form.matiere }}
+            <script>
+                $('#id_matiere').attr('placeholder', 'Enter raw material');
+            </script>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="id_quantity">Quantity:</label>
+            {{ form.quantity }}
+            <script>
+                $('#id_quantity').attr('placeholder', 'Enter quantity');
+            </script>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="id_unit_price">Unit Price:</label>
+            {{ form.unit_price }}
+            <script>
+                $('#id_unit_price').attr('placeholder', 'Enter unit price');
+            </script>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="id_reglement">Reglement:</label>
+            {{ form.reglement }}
+            <script>
+                $('#id_reglement').attr('placeholder', 'Enter reglement');
+            </script>
+        </div>
+        <br>
 
-        <label for="search2">Matière première:</label>
-        <input type="text" id="search2" name="search2" placeholder="Entrez la matière première..."><br><br>
-        
-        <input type="number" id="integer" name="integer" placeholder="Entrez la quantité..."  min="0"><br><br>
-        <input type="number" step="0.01" id="float" name="float" placeholder="Entrez le prix unitaire..."  min="0"><br><br>
-
-        <!-- Container for the dynamically added float input below the checkbox -->
-
-        
-        <label for="checkbox">Paiement partiel:</label>
-        <input type="checkbox" id="checkbox" name="checkbox"><br><br>
-        
-        <div id="float2InputContainer"></div>
-<br> 
-<br>
-        <label for="output2" style="display: none;">Prix restant:</label>
-        <input type="text" id="output2" name="output2" readonly style="display: none;"><br><br>
+        <div class="form-group">
+            <label for="id_total_price">Prix Totale:</label>
+            <output id="id_total_price"></output>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="id_partial_payment">À Payer Partiellement:</label>
+            <input type="checkbox" id="partial_payment_checkbox">
+            <input type="number" id="id_partial_payment" style="display: none;">
+        </div>
+        <br>
 
         <input type="submit" value="Payer">
-
     </form>
+    <script>
+        $(document).ready(function() {
+            $('#id_supplier').select2({
+                ajax: {
+                    url: '/your-suppliers-endpoint/',  // Update this line with the correct URL
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        // assuming data is an array of objects with id and text properties
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: 'Search for a supplier',
+                minimumInputLength: 1
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#id_matiere').select2({
+                ajax: {
+                    url: '/your-raw-materials-endpoint/',  // Update this line with the correct URL
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        // assuming data is an array of objects with id and text properties
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: 'Search for a raw material',
+                minimumInputLength: 1
+            });
+        });
+    </script> 
 
-    <div style="position: absolute; right: 310px;">
-        <label for="output">Prix à payer:</label>
-        <input type="text" id="output" name="output" readonly><br><br>
-    </div>
+    // Add this script at the end of your body
+<script>
+    $(document).ready(function() {
+        // Calculate total price when quantity or unit price changes
+        $('#id_quantity, #id_unit_price').change(function() {
+            var quantity = parseFloat($('#id_quantity').val());
+            var unitPrice = parseFloat($('#id_unit_price').val());
+            var totalPrice = quantity * unitPrice;
+            $('#id_total_price').val(totalPrice.toFixed(2));
+        });
+
+        // Show or hide partial payment input when checkbox is checked or unchecked
+        $('#partial_payment_checkbox').change(function() {
+            if ($(this).is(':checked')) {
+                $('#id_partial_payment').show();
+            } else {
+                $('#id_partial_payment').hide();
+            }
+        });
+
+        // Calculate reglement when total price or partial payment changes
+        $('#id_total_price, #id_partial_payment').change(function() {
+            var totalPrice = parseFloat($('#id_total_price').val());
+            var partialPayment = parseFloat($('#id_partial_payment').val());
+            var reglement = totalPrice - partialPayment;
+            $('#id_reglement').val(reglement.toFixed(2));
+        });
+    });
+</script>
 </body>
 </html>

@@ -1,5 +1,3 @@
-
-
 addClient="Client.html"
 addSupplier="Supplier.html"
 addAchat="achat.html"
