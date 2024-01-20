@@ -39,7 +39,7 @@ class Employee(models.Model):
     address = models.CharField(max_length=100)
     phone = PhoneNumberField()
     daily_salary = models.FloatField()
-    centre = models.ForeignKey(Centre)
+    centre = models.ForeignKey(Centre,on_delete=models.CASCADE)
 
 class Achat(models.Model):
     pur=models.CharField(auto_created=True, max_length=10)
@@ -53,8 +53,8 @@ class Achat(models.Model):
 class Transfer(models.Model):
     num_tr=models.CharField(auto_created=True, max_length=10)
     date = models.DateTimeField(auto_now_add=True,unique=True)
-    centre = models.ForeignKey(Centre)
-    matiere = models.ForeignKey(RawMaterial)
+    centre = models.ForeignKey(Centre,on_delete=models.CASCADE)
+    matiere = models.ForeignKey(RawMaterial,on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
 class Vente(models.Model):
@@ -63,8 +63,8 @@ class Vente(models.Model):
     quantity=models.IntegerField(max_length=10)
     prix_U=models.floatField()
     p_credits=models.models.FloatField()
-    client = models.ForeignKey(Client)
-    matiere=models.ForeignKey(RawMaterial)
+    client = models.ForeignKey(Client,on_delete=models.CASCADE)
+    matiere=models.ForeignKey(RawMaterial,on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     
     
@@ -92,8 +92,8 @@ class VenteP(models.Model):
     quantity=models.IntegerField()
     prix_Unit=models.FloatField()
     p_credits=models.FloatField()
-    code_cl=models.ForeignKey(Client)
-    code_p=models.ForeignKey(Product)
+    code_cl=models.ForeignKey(Client,on_delete=models.CASCADE)
+    code_p=models.ForeignKey(Product,on_delete=models.CASCADE)
 
 class Employe(models.Model):
     Code_E = models.CharField(max_length=20, primary_key=True)

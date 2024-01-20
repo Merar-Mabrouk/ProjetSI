@@ -54,17 +54,21 @@ def add_achat(request):
             idM=form.cleaned_data['matiere']
             caseM="add"
             quant=form.cleaned_data['quantity']
-            modify_raw_by_id(idM=idM,case=caseM,quant=quant)
+            modify_raw_by_id(idM=idM,case=caseM,cuant=quant)
             idS=form.cleaned_data['supplier']
             reg=form.cleaned_data['reglement']
             regler_supplier(pk=idS,somme=reg,cond='add')
             form=AchatForm()
             msg="the new transaction is successfully added"
-            return render(request,"achat.html",{'form':form,'Message':message,'supp':suppliers,'Raw':RawMaterials})
+            return render(request,"achat.html",{'form':form,'Message':msg,'supp':suppliers,'Raw':RawMaterials})
         else:
             form=AchatForm()
             msg="add a transaction"
-            return render(request,"achat.html",{'form':form,'Message':message,'supp':suppliers,'Raw':RawMaterials})
+            return render(request,"achat.html",{'form':form,'Message':msg,'supp':suppliers,'Raw':RawMaterials})
+    else: 
+        form=AchatForm()
+        msg="add a transaction"
+        return render(request,"achat.html",{'form':form,'Message':message,'supp':suppliers,'Raw':RawMaterials})
 def add_vente(request):
     if(request.method =='POST'):
         form=VenteForm(request.POST)
@@ -323,3 +327,12 @@ def vendre_matiere_premiere(request):
     clients = Client.objects.all()
     raw_materials = RawMaterial.objects.all()
     return render(request, 'vendre_matiere_premiere.html', {'clients': clients, 'raw_materials': raw_materials})
+
+
+####  recherche  ####
+def recherche_Supplier(request):
+    if request.method == 'GET':
+        query = request.GET.get('search')
+        if query:
+            supp=Supplier.objects.filter(last_name=query)
+            return render(request,'seatchSup.html',{'supplier':supp})
