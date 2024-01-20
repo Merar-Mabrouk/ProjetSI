@@ -9,8 +9,10 @@ from datetime import datetime
     
 class RawMaterial(models.Model):
     codeM = models.CharField(max_length=10, unique=True)
-    designation = models.CharField(max_length=50)
-    Qstock = models.CharField(max_length=10)    
+    designation = models.CharField(max_length=50, )
+    Qstock = models.IntegerField(max_length=10)    
+    def __str__(self):
+        return (self.designation)
 
 class Client(models.Model):
     code_cl = models.CharField(max_length=10, unique=True,auto_created=True)
@@ -22,12 +24,13 @@ class Client(models.Model):
 
 class Supplier(models.Model):
     code_S = models.CharField(max_length=10, unique=True)
-    first_name = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=40)
+    first_name = models.CharField(max_length=40, )
+    last_name = models.CharField(max_length=40, unique=True)
     address = models.CharField(max_length=100)
     phone = PhoneNumberField()
     balance = models.FloatField()
-
+    def __str__(self):
+        return (self.first_name + ' ' + self.last_name)
 class Centre(models.Model):
     code = models.CharField(max_length=10, unique=True)
     designation = models.CharField(max_length=50)
@@ -42,7 +45,7 @@ class Employee(models.Model):
     centre = models.ForeignKey(Centre,on_delete=models.CASCADE)
 
 class Achat(models.Model):
-    pur=models.CharField(auto_created=True, max_length=10)
+    id = models.IntegerField(primary_key=True, auto_created=True, unique=True, editable=False)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     matiere = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
