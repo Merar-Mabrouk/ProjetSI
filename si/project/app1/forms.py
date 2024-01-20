@@ -5,7 +5,7 @@ from .models import *
 class AchatForm(forms.ModelForm):
     class Meta:
         model = Achat
-        fields = "__all__"
+        fields = ['supplier', 'matiere', 'quantity', 'unit_price', 'reglement']
         
 class VenteForm(forms.ModelForm):
     class Meta:

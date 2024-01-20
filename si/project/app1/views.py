@@ -1,9 +1,12 @@
 # views.py
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Client, Supplier, Employee, RawMaterial, Achat, Sale, Stock, Centre
+from .models import *
 from .forms import *
 from .data import *
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
+from django.core.exceptions import ObjectDoesNotExist
 def add_client(request):
     if(request.method =='POST'):
         form=ClientForm(request.POST)
@@ -12,11 +15,11 @@ def add_client(request):
             form.save()
             form=ClientForm()
             msg="the new client is successfully added"
-            return render(request,"Client.html",{'form':form,'Message':message})
+            return render(request,"Client.html",{'form':form,'Message':msg})
         else:
             form=ClientForm()
             msg="add a client"
-            return render(request,"Client.html",{'form':form,'Message':message})
+            return render(request,"Client.html",{'form':form,'Message':msg})
             
 def add_supplier(request):
     if(request.method =='POST'):
@@ -26,11 +29,11 @@ def add_supplier(request):
             form.save()
             form=SupplierForm()
             msg="the new Supplier is successfully added"
-            return render(request,"Supplier.html",{'form':form,'Message':message})
+            return render(request,"Supplier.html",{'form':form,'Message':msg})
         else:
             form=SupplierForm()
             msg="add a Supplier"
-            return render(request,"Supplier.html",{'form':form,'Message':message})
+            return render(request,"Supplier.html",{'form':form,'Message':msg})
 def add_rawMaterial(request):
     if(request.method =='POST'):
         form=RawForm(request.POST)
@@ -39,22 +42,36 @@ def add_rawMaterial(request):
             form.save()
             form=RawForm()
             msg="the new Material is successfully added"
-            return render(request,"Raw.html",{'form':form,'Message':message})
+            return render(request,"Raw.html",{'form':form,'Message':msg})
         else:
             form=RawForm()
             msg="add a Material"
-            return render(request,"Raw.html",{'form':form,'Message':message})
+            return render(request,"Raw.html",{'form':form,'Message':msg})
+
 def add_achat(request):
+    suppliers=Supplier.objects.all()
+    RawMaterials=RawMaterial.objects.all()
     if(request.method =='POST'):
         form=AchatForm(request.POST)
-        suppliers=Supplier.objects.all()
-        RawMaterials=RawMaterial.objects.all()
         if form.is_valid():
+            # Manually process 'supplier' and 'matiere' fields
+            try:
+                supplier_id = request.POST.get('supplier')
+                supplier = Supplier.objects.get(id=supplier_id)
+                form.instance.supplier = supplier
+
+                matiere_id = request.POST.get('matiere')
+                matiere = RawMaterial.objects.get(id=matiere_id)
+                form.instance.matiere = matiere
+            except ObjectDoesNotExist:
+                form.add_error(None, 'Invalid supplier or raw material')
+                return render(request,"achat.html",{'form':form,'Message':'Invalid supplier or raw material','supp':suppliers,'Raw':RawMaterials})
+
             form.save()
             idM=form.cleaned_data['matiere']
             caseM="add"
             quant=form.cleaned_data['quantity']
-            modify_raw_by_id(idM=idM,case=caseM,cuant=quant)
+            modify_raw_by_id(idM=idM,case=caseM,count=quant)
             idS=form.cleaned_data['supplier']
             reg=form.cleaned_data['reglement']
             regler_supplier(pk=idS,somme=reg,cond='add')
@@ -68,7 +85,7 @@ def add_achat(request):
     else: 
         form=AchatForm()
         msg="add a transaction"
-        return render(request,"achat.html",{'form':form,'Message':message,'supp':suppliers,'Raw':RawMaterials})
+        return render(request,"achat.html",{'form':form,'Message':msg,'supp':suppliers,'Raw':RawMaterials})
 def add_vente(request):
     if(request.method =='POST'):
         form=VenteForm(request.POST)
@@ -87,11 +104,11 @@ def add_vente(request):
                 msg="the new Vente is successfully added"
             else:
                 msg="the quantity u are trying to sell is superior to what u have"  
-            return render(request,"vente.html",{'form':form,'Message':message,'clients':Client,'Raw':RawMaterials})
+            return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
         else:
             form=VenteForm()
             msg="add a Vente"
-            return render(request,"vente.html",{'form':form,'Message':message,'clients':Client,'Raw':RawMaterials})
+            return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
 def add_transfer(request):
     if(request.method =='POST'):
         form=TransferForm(request.POST)
@@ -107,11 +124,11 @@ def add_transfer(request):
                 msg="the new Vente is successfully added"
             else:
                 msg="the quantity u are trying to transfer is superior to what u have"                    
-            return render(request,"transfer.html",{'form':form,'Message':message,'center':centres,'Raw':RawMaterials})
+            return render(request,"transfer.html",{'form':form,'Message':msg,'center':centres,'Raw':RawMaterials})
         else:
             form=TransferForm()
             msg="add a Vente"
-            return render(request,"transfer.html",{'form':form,'Message':message,'center':centres,'Raw':RawMaterials})
+            return render(request,"transfer.html",{'form':form,'Message':msg,'center':centres,'Raw':RawMaterials})
 
 
 ### here are the modifications ###
@@ -197,23 +214,23 @@ def regler_client(pk, somme, cond):
     return True
 
 def regler_supplier(pk, somme, cond):
-    supplier=Supplier.objects.get(id=pk)
+    supplier=pk
     if cond=="regler":
-        supplier.credit=supplier.credit-somme
+        supplier.balance=supplier.balance-somme
     else:
-        supplier.credit=supplier.credit+somme
+        supplier.balance=supplier.balance+somme
     supplier.save()
     return True
 
 def modify_raw_by_id(idM, case,count):
-    raw=RawMaterials.objects.get(id=idM)
+    counts=int(count)
     if(case == "add"):
-        raw.Qstock= raw.Qstock+ count
+        idM.Qstock= idM.Qstock+ counts
     else:
-        if(raw.Qstock<count):
+        if(idM.Qstock<counts):
             return False
-        raw.Qstock= raw.Qstock - count
-    raw.save()
+        idM.Qstock= idM.Qstock - counts
+    idM.save()
     return True
 
         
@@ -327,12 +344,23 @@ def vendre_matiere_premiere(request):
     clients = Client.objects.all()
     raw_materials = RawMaterial.objects.all()
     return render(request, 'vendre_matiere_premiere.html', {'clients': clients, 'raw_materials': raw_materials})
+ 
 
 
-####  recherche  ####
-def recherche_Supplier(request):
-    if request.method == 'GET':
-        query = request.GET.get('search')
-        if query:
-            supp=Supplier.objects.filter(last_name=query)
-            return render(request,'seatchSup.html',{'supplier':supp})
+@require_GET
+def get_suppliers(request):
+    term = request.GET.get('q', '')
+    # Perform a query to retrieve suppliers based on the search term
+    # Replace the following line with your actual query logic
+    suppliers = Supplier.objects.filter(first_name__icontains=term)
+    data = [{'id': supplier.id, 'text': str(supplier)} for supplier in suppliers]
+    return JsonResponse(data, safe=False)
+
+@require_GET
+def get_raw_materials(request):
+    term = request.GET.get('q', '')
+    # Perform a query to retrieve raw materials based on the search term
+    # Replace the following line with your actual query logic
+    raw_materials = RawMaterial.objects.filter(designation__icontains=term)
+    data = [{'id': raw_material.id, 'text': str(raw_material)} for raw_material in raw_materials]
+    return JsonResponse(data, safe=False)

@@ -9,8 +9,10 @@ from datetime import datetime
     
 class RawMaterial(models.Model):
     codeM = models.CharField(max_length=10, unique=True)
-    designation = models.CharField(max_length=50)
-    Qstock = models.CharField(max_length=10)    
+    designation = models.CharField(max_length=50, )
+    Qstock = models.IntegerField(max_length=10)    
+    def __str__(self):
+        return (self.designation)
 
 class Client(models.Model):
     code_cl = models.CharField(max_length=10, unique=True,auto_created=True)
@@ -22,12 +24,13 @@ class Client(models.Model):
 
 class Supplier(models.Model):
     code_S = models.CharField(max_length=10, unique=True)
-    first_name = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=40)
+    first_name = models.CharField(max_length=40, )
+    last_name = models.CharField(max_length=40, unique=True)
     address = models.CharField(max_length=100)
     phone = PhoneNumberField()
     balance = models.FloatField()
-
+    def __str__(self):
+        return (self.first_name + ' ' + self.last_name)
 class Centre(models.Model):
     code = models.CharField(max_length=10, unique=True)
     designation = models.CharField(max_length=50)
@@ -42,7 +45,7 @@ class Employee(models.Model):
     centre = models.ForeignKey(Centre,on_delete=models.CASCADE)
 
 class Achat(models.Model):
-    pur=models.CharField(auto_created=True, max_length=10)
+    id = models.IntegerField(primary_key=True, auto_created=True, unique=True, editable=False)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     matiere = models.ForeignKey(RawMaterial, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
@@ -61,8 +64,8 @@ class Vente(models.Model):
     num_vente=models.IntegerField(auto_created=True)
     sale=models.CharField(auto_created=True, max_length=10)
     quantity=models.IntegerField(max_length=10)
-    prix_U=models.floatField()
-    p_credits=models.models.FloatField()
+    prix_U=models.FloatField()
+    p_credits=models.FloatField()
     client = models.ForeignKey(Client,on_delete=models.CASCADE)
     matiere=models.ForeignKey(RawMaterial,on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
@@ -70,7 +73,7 @@ class Vente(models.Model):
     
 class Stock(models.Model):
     code=models.CharField(max_length=10,unique=True,auto_created=True)
-    name_P=models.ForeignKey(RawMaterial)
+    name_P=models.ForeignKey(RawMaterial,on_delete=models.CASCADE)
     quantity=models.IntegerField()
     def __str__(self):
         return self.name_p
@@ -121,9 +124,9 @@ class Pointage(models.Model):
     Date_P = models.DateTimeField()
     Pointe = models.BooleanField()
 
-class MASSROUF(models.Model):
+class Massrouf(models.Model):
     Num_MAS = models.AutoField(primary_key=True)
     Date_M = models.DateTimeField()
     Credit = models.DecimalField(max_digits=10, decimal_places=2)
-    fk_Code
+    fk_Code = models.ForeignKey(Employe, on_delete=models.CASCADE)
   
