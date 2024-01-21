@@ -71,7 +71,7 @@ select::placeholder {
     font-size: 12px;
 }
 
-/* Specific styling for raw material and supplier inputs */
+/* Specific styling for raw material and client inputs */
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group select {
@@ -99,10 +99,10 @@ select::placeholder {
         {% csrf_token %}
         <!-- Achat Model Fields -->
         <div class="form-group">
-            <label for="id_supplier">Supplier:<br></label>
-            {{ form.supplier }}
+            <label for="id_client">Client:<br></label>
+            {{ form.client }}
             <script>
-                $('#id_supplier').attr('placeholder', 'Enter supplier');
+                $('#id_client').attr('placeholder', 'Enter client');
             </script>
         </div>
         <br>
@@ -158,13 +158,13 @@ select::placeholder {
         </div>
         <br>
 
-        <input type="submit" value="Payer">
+        <input type="submit" value="Vendre">
     </form>
     <script>
         $(document).ready(function() {
-            $('#id_supplier').select2({
+            $('#id_client').select2({
                 ajax: {
-                    url: '/your-suppliers-endpoint/',  // Update this line with the correct URL
+                    url: '/your-clients-endpoint/',  // Update this line with the correct URL
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -181,7 +181,7 @@ select::placeholder {
                     },
                     cache: true
                 },
-                placeholder: 'Search for a supplier',
+                placeholder: 'Search for a client',
                 minimumInputLength: 1
             });
         });
