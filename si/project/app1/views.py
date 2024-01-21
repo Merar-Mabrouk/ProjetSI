@@ -236,11 +236,10 @@ def add_product(request):
         return render(request,addProduct,{'form':form})
 
 def add_VenteP(request):
-    
+    RawMaterials=Product.objects.all()
+    clients=Client.objects.all()
     if(request=='POST'):
-        form=VenteRForm(request.POST)
-        clients=Client.objects.all()
-        RawMaterials=RawMaterial.objects.all()
+        form=VentePForm(request.POST)
         if form.is_valid():
             idM=form.cleaned_data['code_p']
             caseM="remove"
@@ -250,17 +249,17 @@ def add_VenteP(request):
                 reg=form.cleaned_data['p_credits']
                 regler_client(pk=idS,somme=reg,cond='add')
                 form.save()
-                form=TransferForm()
+                form=VentePForm()
                 msg="the new Vente Product is successfully added"
             else:
                 msg="the quantity u are trying to sell is superior to what u have"  
             return render(request,venteP,{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
         else:
-            form=VenteForm()
+            form=VentePForm()
             msg="the form is invalid"
             return render(request,venteP,{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
     else:
-        form=VenteForm()
+        form=VentePForm()
         msg="add a Vente for product"
         return render(request,venteP,{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
 
@@ -499,5 +498,5 @@ def get_Products(request):
     # Perform a query to retrieve suppliers based on the search term
     # Replace the following line with your actual query logic
     products = Product.objects.filter(designation__icontains=term)
-    data = [{'id': Product.id, 'text': str(product)} for product in products]
+    data = [{'id': product.id, 'text': str(product)} for product in products]
     return JsonResponse(data, safe=False)
