@@ -21,6 +21,7 @@ class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = ['first_name','last_name','address','phone','credit']
+        fields = ['first_name','last_name','address','phone','credit']
 
 class SupplierForm(forms.ModelForm):
     class Meta:

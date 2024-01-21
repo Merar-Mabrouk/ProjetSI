@@ -87,24 +87,23 @@ def add_achat(request):
         msg="add a transaction"
         return render(request,"achat.html",{'form':form,'Message':msg,'supp':suppliers,'Raw':RawMaterials})
 def add_vente(request):
-    if(request.method =='POST'):
-        form=VenteForm(request.POST)
-        clients=Client.objects.all()
-        RawMaterials=RawMaterial.objects.all()
+    clients = Client.objects.all()
+    RawMaterials = RawMaterial.objects.all()
+    if request.method == 'POST':
+        form = VenteForm(request.POST)
         if form.is_valid():
-            idM=form.cleaned_data['matiere']
-            caseM="remove"
-            quant=form.cleaned_data['quantity']
-            if(modify_raw_by_id(idM=idM,case=caseM,quant=quant)):
-                idS=form.cleaned_data['client']
-                reg=form.cleaned_data['p_credits']
-                regler_client(pk=idS,somme=reg,cond='add')
+            idM = form.cleaned_data['matiere']
+            caseM = "remove"
+            quant = form.cleaned_data['quantity']
+            if modify_raw_by_id(idM=idM, case=caseM, count=quant):
+                idS = form.cleaned_data['client']
+                reg = form.cleaned_data['p_credits']
+                regler_client(pk=idS, somme=reg, cond='add')
                 form.save()
-                form=TransferForm()
-                msg="the new Vente is successfully added"
+                form = VenteForm()
+                msg = "The new Vente is successfully added"
             else:
-                msg="the quantity u are trying to sell is superior to what u have"  
-            return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
+                msg = "The quantity you are trying to sell is superior to what you have"
         else:
             form=VenteForm()
             msg="ur form is invalid"
@@ -139,7 +138,7 @@ def add_transfer(request):
 def modify_client(request,pk):
     client=Client.objects.get(id=pk)
     if(request=='POST'):
-        form=clientForm(request.POST,instance=client)
+        form=ClientForm(request.POST,instance=client)
         if form.is_valid():
             form.save()
             return redirect(listClient)
@@ -150,7 +149,7 @@ def modify_client(request,pk):
 def modify_supplier(request,pk):
     supp=Supplier.objects.get(id=pk)
     if(request=='POST'):
-        form=suppForm(request.POST,instance=supp)
+        form=SupplierForm(request.POST,instance=supp)
         if form.is_valid():
             form.save()
             return redirect(listSupplier)
@@ -434,4 +433,13 @@ def get_raw_materials(request):
     # Replace the following line with your actual query logic
     raw_materials = RawMaterial.objects.filter(designation__icontains=term)
     data = [{'id': raw_material.id, 'text': str(raw_material)} for raw_material in raw_materials]
+    return JsonResponse(data, safe=False)
+
+@require_GET
+def get_clients(request):
+    term = request.GET.get('q', '')
+    # Perform a query to retrieve suppliers based on the search term
+    # Replace the following line with your actual query logic
+    clients = Client.objects.filter(first_name__icontains=term)
+    data = [{'id': client.id, 'text': str(client)} for client in clients]
     return JsonResponse(data, safe=False)

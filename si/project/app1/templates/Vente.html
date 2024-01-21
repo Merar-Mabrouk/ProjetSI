@@ -71,7 +71,7 @@ select::placeholder {
     font-size: 12px;
 }
 
-/* Specific styling for raw material and supplier inputs */
+/* Specific styling for raw material and client inputs */
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group select {
@@ -99,10 +99,10 @@ select::placeholder {
         {% csrf_token %}
         <!-- Achat Model Fields -->
         <div class="form-group">
-            <label for="id_supplier">Supplier:<br></label>
-            {{ form.supplier }}
+            <label for="id_client">Client:<br></label>
+            {{ form.client }}
             <script>
-                $('#id_supplier').attr('placeholder', 'Enter supplier');
+                $('#id_client').attr('placeholder', 'Enter client');
             </script>
         </div>
         <br>
@@ -123,29 +123,26 @@ select::placeholder {
             </script>
         </div>
         <br>
+        
         <div class="form-group">
-            <label for="id_unit_price">Unit Price:</label>
-            {{ form.unit_price }}
+            <label for="id_prix_U">Unit Price:</label>
+            {{ form.prix_U }}
             <script>
-                $('#id_unit_price').attr('placeholder', 'Enter unit price');
+                $('#id_prix_U').attr('placeholder', 'Enter unit price');
+            </script>
+        </div>
+        <br>
+        <div class="form-group" style="display: none;">
+            <label for="id_p_credits">Reglement:</label>
+            {{ form.p_credits }}
+            <script>
+                $('#id_p_credits').attr('placeholder', 'Enter reglement');
             </script>
         </div>
         <br>
         <div class="form-group">
-            <label style="display:none;" for="id_reglement">Reglement:</label>
-            {{ form.reglement }}
-            <script>
-                $('#id_reglement').attr('placeholder', 'Enter reglement');
-                $(document).ready(function() {
-                    $('#id_reglement').hide();
-                });
-            </script>
-        </div>
-        <br>
-
-        <div class="form-group">
-            <label for="id_total_price">Prix Totale:</label>
-            <output id="id_total_price" style="border-radius: 30px; padding: 10px; width: 100%; margin: 5px; border: 0; background-color: #ffffff28; color: #d5d5d5;"></output>
+            <label for="id_total_price_output">Prix Totale:</label>
+            <output id="id_total_price_output" style="border-radius: 30px; padding: 10px; width: 100%; margin: 5px; border: 0; background-color: #ffffff28; color: #d5d5d5;"></output>
         </div>
         <br>
         <div class="form-group">
@@ -153,18 +150,19 @@ select::placeholder {
             <label style="margin-left:100px; position:absolute"  for="partial_payment_checkbox"> Payemenet Partiel:</label>
             <input style="margin-right:100px; position:absolute" type="checkbox" id="partial_payment_checkbox">
             <br> <br>
-            <label id="partial_payment_label" for="id_partial_payment">À Payer Partiellement:</label>
-            <input type="number" id="id_partial_payment" style="display: none;">
-        </div>
+            <div class="form-group" id="partial_payment_container" style="display:none;">
+                <label id="partial_payment_label" for="id_partial_payment_input">À Payer Partiellement:</label>
+                <input type="number" id="id_partial_payment_input">
+            </div>
         <br>
 
-        <input type="submit" value="Payer">
+        <input type="submit" value="Vendre">
     </form>
     <script>
         $(document).ready(function() {
-            $('#id_supplier').select2({
+            $('#id_client').select2({
                 ajax: {
-                    url: '/your-suppliers-endpoint/',  // Update this line with the correct URL
+                    url: '/your-clients-endpoint/',  // Update this line with the correct URL
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -181,7 +179,7 @@ select::placeholder {
                     },
                     cache: true
                 },
-                placeholder: 'Search for a supplier',
+                placeholder: 'Search for a client',
                 minimumInputLength: 1
             });
         });
@@ -214,39 +212,36 @@ select::placeholder {
     </script> 
 
     
-<script>
-    $(document).ready(function() {
-        // Calculate total price when quantity or unit price changes
-        $('#id_quantity, #id_unit_price').change(function() {
-            var quantity = parseFloat($('#id_quantity').val());
-            var unitPrice = parseFloat($('#id_unit_price').val());
-            var totalPrice = quantity * unitPrice;
-            $('#id_total_price').val(totalPrice.toFixed(2));
+    <script>
+        $(document).ready(function() {
+            // Calculate total price when quantity or unit price changes
+            $('#id_quantity, #id_prix_U').change(function() {
+                var quantity = parseFloat($('#id_quantity').val());
+                var unitPrice = parseFloat($('#id_prix_U').val());
+                var totalPrice = quantity * unitPrice;
+                $('#id_total_price_output').text(totalPrice.toFixed(2));
+                $('#id_total_price_output').change();  // Manually trigger the change event
+            });
+            
+            $('#partial_payment_checkbox').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#partial_payment_container').show();
+                } else {
+                    $('#partial_payment_container').hide();
+                }
+                $('#id_partial_payment_input').change();  // Manually trigger the change event
+            });
+    
+            // Calculate reglement when total price or partial payment changes
+            $('#id_total_price_output, #id_partial_payment_input').change(function() {
+                var totalPrice = parseFloat($('#id_total_price_output').text());
+                var partialPayment = parseFloat($('#id_partial_payment_input').val()) || 0;
+                var reglement = totalPrice - partialPayment;
+                $('#id_p_credits').val(reglement.toFixed(2));
+            });
         });
-
-        // Show or hide partial payment input when checkbox is checked or unchecked
-        $('#partial_payment_label').hide();
-        $('#id_partial_payment').hide();
-
-        // Show or hide partial payment input and label when checkbox is checked or unchecked
-        $('#partial_payment_checkbox').change(function() {
-            if ($(this).is(':checked')) {
-                $('#partial_payment_label').show();
-                $('#id_partial_payment').show();
-            } else {
-                $('#partial_payment_label').hide();
-                $('#id_partial_payment').hide();
-            }
-        });
-
-        // Calculate reglement when total price or partial payment changes
-        $('#id_total_price, #id_partial_payment').change(function() {
-            var totalPrice = parseFloat($('#id_total_price').val());
-            var partialPayment = parseFloat($('#id_partial_payment').val());
-            var reglement = totalPrice - partialPayment;
-            $('#id_reglement').val(reglement.toFixed(2));
-        });
-    });
-</script>
+    </script>
+    
+        
 </body>
 </html>

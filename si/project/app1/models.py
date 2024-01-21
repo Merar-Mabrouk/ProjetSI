@@ -72,7 +72,7 @@ class Transfer(models.Model):
         return ('Transfer num'+self.num_tr)
 
 class Vente(models.Model):
-    num_vente=models.IntegerField(auto_created=True)
+    num_vente=models.IntegerField(primary_key=True, auto_created=True, unique=True, editable=False)
     sale=models.CharField(auto_created=True, max_length=10)
     quantity=models.IntegerField(max_length=10)
     prix_U=models.FloatField()
@@ -81,7 +81,7 @@ class Vente(models.Model):
     matiere=models.ForeignKey(RawMaterial,on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return ('vente num'+self.num_vente)
+        return ('vente num'+str(self.num_vente))
     
     
 class Stock(models.Model):
