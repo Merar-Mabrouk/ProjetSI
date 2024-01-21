@@ -236,11 +236,10 @@ def add_product(request):
         return render(request,addProduct,{'form':form})
 
 def add_VenteP(request):
-    
+    RawMaterials=Product.objects.all()
+    clients=Client.objects.all()
     if(request=='POST'):
         form=VenteRForm(request.POST)
-        clients=Client.objects.all()
-        RawMaterials=RawMaterial.objects.all()
         if form.is_valid():
             idM=form.cleaned_data['code_p']
             caseM="remove"
@@ -309,6 +308,11 @@ def add_Massrouf(request):
         
 
 
+### here u find the listing of everything ###  
+
+# def afficher_achat(request):
+    
+  
 ### here u find the deleting stuff ###    
             
 ### here we find functions that are to be used in other one.. ###            
