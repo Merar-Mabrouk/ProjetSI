@@ -254,15 +254,15 @@ def add_VenteP(request):
                 msg="the new Vente Product is successfully added"
             else:
                 msg="the quantity u are trying to sell is superior to what u have"  
-            return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
+            return render(request,venteP,{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
         else:
             form=VenteForm()
             msg="the form is invalid"
-            return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
+            return render(request,venteP,{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
     else:
         form=VenteForm()
         msg="add a Vente for product"
-        return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
+        return render(request,venteP,{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
 
 def regler_venteP(request,pk):
     vente=VenteP.objects.get(id=pk)
@@ -273,7 +273,7 @@ def regler_venteP(request,pk):
             if(vente.p_credits<cred):
                 msg="the money added is too much"
                 form=VenteRForm()
-                return render(request,regletVente,{'form':form, 'vente':vente})
+                return render(request,regletVenteP,{'form':form, 'vente':vente})
             else:
                 idS=form.cleaned_data['client']
                 reg=form.cleaned_data['p_credits']
@@ -287,6 +287,25 @@ def regler_venteP(request,pk):
             msg="regler la vente"
             return render(request,regletVente,{'form':form, 'vente':vente})
        
+def add_Massrouf(request):
+    employe=Employe.objects.all()
+    if(request=='POST'):
+        form=MassroufForm(request.POST,instance=Massrouf)
+        if form.is_valid():
+            cred=form.cleaned_data['Credit']
+            em=form.cleaned_data['fk_Code']
+            if(cred>em.Salaire_par_jour):
+                msg="u can't give him more than he earn.."
+                form=MassroufForm()
+                return render(request,masrouf,{'form':form,'Message':msg,'employee':employe})
+            else:
+                form.save()
+                msg="success"
+                return render(request,masrouf,{'form':form,'Message':msg,'employee':employe})
+    else:
+        form=MassroufForm()
+        msg="add Massrouf"            
+        return render(request,masrouf,{'form':form,'Message':msg,'employee':employe})
         
 
 
@@ -472,4 +491,13 @@ def get_clients(request):
     # Replace the following line with your actual query logic
     clients = Client.objects.filter(first_name__icontains=term)
     data = [{'id': client.id, 'text': str(client)} for client in clients]
+    return JsonResponse(data, safe=False)
+
+@require_GET
+def get_Products(request):
+    term = request.GET.get('q', '')
+    # Perform a query to retrieve suppliers based on the search term
+    # Replace the following line with your actual query logic
+    products = Product.objects.filter(designation__icontains=term)
+    data = [{'id': Product.id, 'text': str(product)} for product in products]
     return JsonResponse(data, safe=False)

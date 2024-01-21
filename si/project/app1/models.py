@@ -59,7 +59,7 @@ class Achat(models.Model):
     unit_price = models.FloatField()
     reglement = models.FloatField()
     def __str__(self):
-        return ("l'achat num"+self.id)
+        return ("l'achat num"+str(self.id))
 
 class Transfer(models.Model):
     num_tr=models.CharField(auto_created=True, max_length=10,null=False,editable=False,primary_key=True)

@@ -59,3 +59,8 @@ class PointageForm(forms.ModelForm):
      class Meta:
          model= Pointage
          fields=['Date_P','Pointe','Employe']
+         
+class MassroufForm(forms.ModelForm):
+    class Meta:
+        model= Massrouf
+        fields=['num_MAS','Date_M','Credit','fk_Code']
