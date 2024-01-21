@@ -107,8 +107,12 @@ def add_vente(request):
             return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
         else:
             form=VenteForm()
-            msg="add a Vente"
+            msg="ur form is invalid"
             return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
+    else:
+        form=VenteForm()
+        msg="add a Vente"
+        return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
 def add_transfer(request):
     if(request.method =='POST'):
         form=TransferForm(request.POST)
@@ -118,7 +122,7 @@ def add_transfer(request):
             idM=form.cleaned_data['matiere']
             caseM="remove"
             quant=form.cleaned_data['quantity']
-            if(modify_raw_by_id(idM=idM,case=caseM,quant=quant)):
+            if(modify_raw_by_id(idM=idM,case=caseM,count=quant)):
                 form.save()
                 form=TransferForm()
                 msg="the new Vente is successfully added"
@@ -127,7 +131,7 @@ def add_transfer(request):
             return render(request,"transfer.html",{'form':form,'Message':msg,'center':centres,'Raw':RawMaterials})
         else:
             form=TransferForm()
-            msg="add a Vente"
+            msg="add a transfer"
             return render(request,"transfer.html",{'form':form,'Message':msg,'center':centres,'Raw':RawMaterials})
 
 
@@ -226,6 +230,37 @@ def add_product(request):
         form=ProductForm()
         return render(request,addProduct,{'form':form})
 
+def add_VenteP(request):
+    
+    if(request=='POST'):
+        form=VenteRForm(request.POST)
+        clients=Client.objects.all()
+        RawMaterials=RawMaterial.objects.all()
+        if form.is_valid():
+            idM=form.cleaned_data['matiere']
+            caseM="remove"
+            quant=form.cleaned_data['quantity']
+            if(modify_product_by_id(idM=idM,case=caseM,count=quant)):
+                idS=form.cleaned_data['code_cl']
+                reg=form.cleaned_data['p_credits']
+                regler_client(pk=idS,somme=reg,cond='add')
+                form.save()
+                form=TransferForm()
+                msg="the new Vente Product is successfully added"
+            else:
+                msg="the quantity u are trying to sell is superior to what u have"  
+            return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
+        else:
+            form=VenteForm()
+            msg="the form is invalid"
+            return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
+    else:
+        form=VenteForm()
+        msg="add a Vente for product"
+        return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
+        
+        
+    
 ### here u find the deleting stuff ###    
             
 ### here we find functions that are to be used in other one.. ###            
@@ -259,6 +294,16 @@ def modify_raw_by_id(idM, case,count):
     idM.save()
     return True
 
+def modify_product_by_id(idM, case, count):
+    counts = int(count)
+    if(case == "add"):
+        idM.Quantity=idM.Quantity+counts
+    else:
+        if(idM.Quantity<counts):
+            return False
+        idM.Quantity= idM.Quantity - counts
+    idM.save()
+    return True
         
         
             

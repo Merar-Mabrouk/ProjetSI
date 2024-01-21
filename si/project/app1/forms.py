@@ -20,7 +20,7 @@ class RawForm(forms.ModelForm):
 class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
-        fields = ['first_name','last_name','adress','phone','credit']
+        fields = ['first_name','last_name','address','phone','credit']
 
 class SupplierForm(forms.ModelForm):
     class Meta:
@@ -30,7 +30,7 @@ class SupplierForm(forms.ModelForm):
 class TransferForm(forms.ModelForm):
     class Meta:
         model= Transfer
-        fields=['centre','matiere','quantity']
+        fields=['centre','matiere','quantity','prix_Unit']
         
         
 class AchatRForm(forms.ModelForm):
@@ -47,4 +47,14 @@ class VenteRForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model= Product
-        feilds= ['Desiginiation_P','Quantity',]
+        fields= ['Desiginiation_P','Quantity']
+        
+class VentePForm(forms.ModelForm):
+    class Meta:
+        model= VenteP
+        fields=['quantity','prix_Unit','p_credits','code_cl','code_p']
+
+class PointageForm(forms.ModelForm):
+     class Meta:
+         model= Pointage
+         fields=['Date_P','Pointe','Employe']

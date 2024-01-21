@@ -66,6 +66,7 @@ class Transfer(models.Model):
     date = models.DateTimeField(auto_now_add=True,unique=True)
     centre = models.ForeignKey(Centre,on_delete=models.CASCADE)
     matiere = models.ForeignKey(RawMaterial,on_delete=models.CASCADE)
+    prix_Unit=models.FloatField()
     quantity = models.IntegerField()
     def __str__(self):
         return ('Transfer num'+self.num_tr)
@@ -137,16 +138,13 @@ class EnRapport(models.Model):
     def __str__(self):
         return 'en rapport avec'+self.fk_Code_E
 
-class Doit(models.Model):
-    fk_Code = models.CharField(max_length=20)
-    fk_Num_P = models.IntegerField()
-
 class Pointage(models.Model):
     Num_P = models.AutoField(primary_key=True)
     Date_P = models.DateTimeField()
     Pointe = models.BooleanField()
+    Employe = models.ForeignKey(Employe, on_delete=models.CASCADE)
     def __str__(self):
-        return 'Pointage:'+self.Num_P
+        return 'Pointage:'+self.Num_P+' de '+self.Employe.name_E
     
 
 class Massrouf(models.Model):
