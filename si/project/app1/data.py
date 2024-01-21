@@ -21,3 +21,5 @@ regletVente="VenteRegler.html"
 
 ### center pages ###
 addProduct="product.html"
+massrouf="massrouf.html"
+venteP="vente_p.html"

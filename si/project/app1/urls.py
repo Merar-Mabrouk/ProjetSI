@@ -11,4 +11,5 @@ urlpatterns = [
     path('your-suppliers-endpoint/', views.get_suppliers, name='get_suppliers'),
     path('your-clients-endpoint/', views.get_clients, name='get_clients'),
     path('your-raw-materials-endpoint/', views.get_raw_materials, name='get_raw_materials'),
+    path('your-product-endpoint/', views.get_Products, name='get_product'),
 ]
