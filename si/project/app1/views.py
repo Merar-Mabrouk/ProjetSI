@@ -113,10 +113,10 @@ def add_vente(request):
         msg="add a Vente"
         return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
 def add_transfer(request):
+    centres=Centre.objects.all()
+    RawMaterials=RawMaterial.objects.all()
     if(request.method =='POST'):
         form=TransferForm(request.POST)
-        centres=Centre.objects.all()
-        RawMaterials=RawMaterial.objects.all()
         if form.is_valid():
             idM=form.cleaned_data['matiere']
             caseM="remove"
@@ -126,12 +126,18 @@ def add_transfer(request):
                 form=TransferForm()
                 msg="the new Vente is successfully added"
             else:
+                form=TransferForm()
                 msg="the quantity u are trying to transfer is superior to what u have"                    
             return render(request,"transfer.html",{'form':form,'Message':msg,'center':centres,'Raw':RawMaterials})
         else:
             form=TransferForm()
             msg="add a transfer"
             return render(request,"transfer.html",{'form':form,'Message':msg,'center':centres,'Raw':RawMaterials})
+    else:
+        form=TransferForm()
+        msg="add a transfer"
+        return render(request,"transfer.html",{'form':form,'Message':msg,'center':centres,'Raw':RawMaterials}) 
+        
 
 
 ### here are the modifications ###
@@ -257,7 +263,30 @@ def add_VenteP(request):
         form=VenteForm()
         msg="add a Vente for product"
         return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
-        
+
+def regler_venteP(request,pk):
+    vente=VenteP.objects.get(id=pk)
+    if(request=='POST'):
+        form=VenteRForm(request.POST,instance=vente)
+        if form.is_valid():
+            cred=form.cleaned_data['p_credits']
+            if(vente.p_credits<cred):
+                msg="the money added is too much"
+                form=VenteRForm()
+                return render(request,regletVente,{'form':form, 'vente':vente})
+            else:
+                idS=form.cleaned_data['client']
+                reg=form.cleaned_data['p_credits']
+                regler_supplier(pk=idS,somme=reg,cond='regler')
+                form.save()
+                msg="the cut was added successfully"
+                return redirect(listVente)
+                
+        else:
+            form=VenteRForm()
+            msg="regler la vente"
+            return render(request,regletVente,{'form':form, 'vente':vente})
+       
         
     
 ### here u find the deleting stuff ###    

@@ -62,7 +62,7 @@ class Achat(models.Model):
         return ("l'achat num"+self.id)
 
 class Transfer(models.Model):
-    num_tr=models.CharField(auto_created=True, max_length=10)
+    num_tr=models.CharField(auto_created=True, max_length=10,null=False,editable=False)
     date = models.DateTimeField(auto_now_add=True,unique=True)
     centre = models.ForeignKey(Centre,on_delete=models.CASCADE)
     matiere = models.ForeignKey(RawMaterial,on_delete=models.CASCADE)
