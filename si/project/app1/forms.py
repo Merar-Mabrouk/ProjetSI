@@ -10,27 +10,27 @@ class AchatForm(forms.ModelForm):
 class VenteForm(forms.ModelForm):
     class Meta:
         model = Vente
-        fields = "__all__"
+        fields = ['sale','quantity','prix_U','p_credits','client','matiere']
         
 class RawForm(forms.ModelForm):
     class Meta:
         model = RawMaterial
-        fields = '__all__'
+        fields = ['designation','Qstock']
         
 class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
-        fields = '__all__'
+        fields = ['first_name','last_name','adress','phone','credit']
 
 class SupplierForm(forms.ModelForm):
     class Meta:
         model = Supplier
-        fields = '__all__'
+        fields = ['first_name','last_name','address','phone','balance']
         
 class TransferForm(forms.ModelForm):
     class Meta:
         model= Transfer
-        fields='__all__'
+        fields=['centre','matiere','quantity']
         
         
 class AchatRForm(forms.ModelForm):
