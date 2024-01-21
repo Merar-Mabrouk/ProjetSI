@@ -10,7 +10,7 @@ class AchatForm(forms.ModelForm):
 class VenteForm(forms.ModelForm):
     class Meta:
         model = Vente
-        fields = ['sale','quantity','prix_U','p_credits','client','matiere']
+        fields = ['quantity','prix_U','p_credits','client','matiere']
         
 class RawForm(forms.ModelForm):
     class Meta:
@@ -42,3 +42,9 @@ class VenteRForm(forms.ModelForm):
     class Meta:
         model = Vente
         fields = ['p_credits']
+          
+###  here the things used in the centres  ###
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model= Product
+        feilds= ['Desiginiation_P','Quantity',]
