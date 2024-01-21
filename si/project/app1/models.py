@@ -62,14 +62,14 @@ class Achat(models.Model):
         return ("l'achat num"+str(self.id))
 
 class Transfer(models.Model):
-    num_tr=models.CharField(auto_created=True, max_length=10,null=False,editable=False,primary_key=True)
-    date = models.DateTimeField(auto_now_add=True,unique=True)
+    num_tr=models.IntegerField(primary_key=True, auto_created=True, unique=True, editable=False)
+    date = models.DateTimeField(auto_now_add=True)
     centre = models.ForeignKey(Centre,on_delete=models.CASCADE)
     matiere = models.ForeignKey(RawMaterial,on_delete=models.CASCADE)
     prix_Unit=models.FloatField()
     quantity = models.IntegerField()
     def __str__(self):
-        return ('Transfer num'+self.num_tr)
+        return ('Transfer num'+str(self.num_tr))
 
 class Vente(models.Model):
     num_vente=models.IntegerField(primary_key=True, auto_created=True, unique=True, editable=False)
