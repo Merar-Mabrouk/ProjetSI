@@ -242,7 +242,7 @@ def add_VenteP(request):
         clients=Client.objects.all()
         RawMaterials=RawMaterial.objects.all()
         if form.is_valid():
-            idM=form.cleaned_data['matiere']
+            idM=form.cleaned_data['code_p']
             caseM="remove"
             quant=form.cleaned_data['quantity']
             if(modify_product_by_id(idM=idM,case=caseM,count=quant)):
@@ -288,7 +288,8 @@ def regler_venteP(request,pk):
             return render(request,regletVente,{'form':form, 'vente':vente})
        
         
-    
+
+
 ### here u find the deleting stuff ###    
             
 ### here we find functions that are to be used in other one.. ###            
