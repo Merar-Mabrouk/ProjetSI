@@ -288,7 +288,8 @@ def regler_venteP(request,pk):
             return render(request,regletVente,{'form':form, 'vente':vente})
        
         
-    
+
+
 ### here u find the deleting stuff ###    
             
 ### here we find functions that are to be used in other one.. ###            
