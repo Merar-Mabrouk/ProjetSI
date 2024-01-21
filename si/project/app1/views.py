@@ -199,13 +199,39 @@ def regler_Achat(request,pk):
             form=AchatRForm()
             msg="regler l'Achat"
             return render(request,regletAchat,{'form':form, 'achat':achat})
+    else:
+        form=AchatRForm()
+        msg="regler l'Achat"
+        return render(request,regletAchat,{'form':form, 'achat':achat})
+        
+        
+        
     
+### here u find the views that are used by the  center###    
+
+def add_product(request):
+    if(request=='POST'):
+        form=ProductForm(request.POST,instance=Product)
+        if(form.is_valid):
+            msg="The product was added successfully"
+            form.save()
+            return render(request,addProduct,{'form':form})
+        else :
+            msg="add a product "
+            form=ProductForm()
+            return render(request,addProduct,{'form':form})
+        
+    else :
+        msg="add a product "
+        form=ProductForm()
+        return render(request,addProduct,{'form':form})
+
 ### here u find the deleting stuff ###    
             
 ### here we find functions that are to be used in other one.. ###            
 
 def regler_client(pk, somme, cond):
-    client=Client.objects.get(id=pk)
+    client=pk
     if cond=="regler":
         client.credit=client.credit-somme
     else:

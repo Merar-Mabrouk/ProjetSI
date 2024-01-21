@@ -18,3 +18,6 @@ listTransfer="TransferList.html"
 #### here are the reglement part ####
 regletAchat="AchatRegler.html"
 regletVente="VenteRegler.html"
+
+### center pages ###
+addProduct="product.html"

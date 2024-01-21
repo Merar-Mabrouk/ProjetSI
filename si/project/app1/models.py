@@ -21,6 +21,8 @@ class Client(models.Model):
     address = models.CharField(max_length=100)
     phone = PhoneNumberField()
     credit = models.FloatField()
+    def __str__(self):
+        return self.last_name+' '+self.first_name
 
 class Supplier(models.Model):
     code_S = models.CharField(max_length=10, unique=True)
@@ -34,6 +36,8 @@ class Supplier(models.Model):
 class Centre(models.Model):
     code = models.CharField(max_length=10, unique=True)
     designation = models.CharField(max_length=50)
+    def __str__(self):
+        return (self.designation)
 
 class Employee(models.Model):
     code = models.CharField(max_length=10, unique=True)
@@ -43,6 +47,8 @@ class Employee(models.Model):
     phone = PhoneNumberField()
     daily_salary = models.FloatField()
     centre = models.ForeignKey(Centre,on_delete=models.CASCADE)
+    def __str__(self):
+        return self.first_name+''+self.last_name
 
 class Achat(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True, unique=True, editable=False)
@@ -52,6 +58,8 @@ class Achat(models.Model):
     quantity = models.IntegerField()
     unit_price = models.FloatField()
     reglement = models.FloatField()
+    def __str__(self):
+        return ("l'achat num"+self.id)
 
 class Transfer(models.Model):
     num_tr=models.CharField(auto_created=True, max_length=10)
@@ -59,6 +67,8 @@ class Transfer(models.Model):
     centre = models.ForeignKey(Centre,on_delete=models.CASCADE)
     matiere = models.ForeignKey(RawMaterial,on_delete=models.CASCADE)
     quantity = models.IntegerField()
+    def __str__(self):
+        return ('Transfer num'+self.num_tr)
 
 class Vente(models.Model):
     num_vente=models.IntegerField(auto_created=True)
@@ -69,6 +79,8 @@ class Vente(models.Model):
     client = models.ForeignKey(Client,on_delete=models.CASCADE)
     matiere=models.ForeignKey(RawMaterial,on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return ('vente num'+self.num_vente)
     
     
 class Stock(models.Model):
@@ -88,6 +100,8 @@ class Product(models.Model):
     Desiginiation_P=models.CharField(max_length=10)
     Quantity=models.IntegerField()
     prix_Unit=models.IntegerField() 
+    def __str__(self):
+        return self.Desiginiation_P
 
 class VenteP(models.Model):
     num_V=models.IntegerField()
@@ -97,6 +111,8 @@ class VenteP(models.Model):
     p_credits=models.FloatField()
     code_cl=models.ForeignKey(Client,on_delete=models.CASCADE)
     code_p=models.ForeignKey(Product,on_delete=models.CASCADE)
+    def __str__(self):
+        return "Vente num"+self.num_V
 
 class Employe(models.Model):
     Code_E = models.CharField(max_length=20, primary_key=True)
@@ -106,14 +122,20 @@ class Employe(models.Model):
     Tel_E = models.CharField(max_length=15)
     Salaire_par_jour = models.DecimalField(max_digits=10, decimal_places=2)
     fk_Code_CE = models.CharField(max_length=20)  # Assurez-vous que le type correspond au type de la clé étrangère dans votre modèle Code_CE
-
+    def __str__(self):
+        return self.Nom_E+' '+self.Prenom_E
+    
 class PV(models.Model):
     Date_PV = models.DateTimeField(primary_key=True)
     Text = models.TextField()
+    def __str__(self):
+        return str(self.Date_PV.now())
 
 class EnRapport(models.Model):
     fk_Code_E = models.ForeignKey(Employe, on_delete=models.CASCADE)
     fk_Date_PV = models.ForeignKey(PV, on_delete=models.CASCADE)
+    def __str__(self):
+        return 'en rapport avec'+self.fk_Code_E
 
 class Doit(models.Model):
     fk_Code = models.CharField(max_length=20)
@@ -123,10 +145,16 @@ class Pointage(models.Model):
     Num_P = models.AutoField(primary_key=True)
     Date_P = models.DateTimeField()
     Pointe = models.BooleanField()
+    def __str__(self):
+        return 'Pointage:'+self.Num_P
+    
 
 class Massrouf(models.Model):
     Num_MAS = models.AutoField(primary_key=True)
     Date_M = models.DateTimeField()
     Credit = models.DecimalField(max_digits=10, decimal_places=2)
     fk_Code = models.ForeignKey(Employe, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.Num_MAS
+    
   
