@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ Message }}</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css">
+    <style>
+        body {
+            background-image: url("https://cdn.svgator.com/images/2022/06/use-svg-as-background-image-particle-strokes.svg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            color: #d5d5d5;
+        }
+        
+        form {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        form::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(26, 36, 69, 0.267);
+            backdrop-filter: blur(3px);
+            z-index: -1;
+        }
+
+        input[type="submit"] {
+            background-color: #53af4c;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            padding: 10px 20px;
+            font-size: 14px;
+            margin-left: 490px; /* This will push the button to the right */
+        }
+        
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        
+
+        
+        /* General input styling for input and select elements */
+        input:not([type="submit"]),
+        select {
+            border-radius: 30px;
+            padding: 10px;
+            width: 100%;
+            margin: 5px;
+            border: 0;
+            background-color: #ffffff28;
+            color: #d5d5d5;
+        }
+
+        
+
+/* Placeholder styling for input and select elements */
+input::placeholder,
+select::placeholder {
+    font-size: 12px;
+}
+
+/* Specific styling for raw material and client inputs */
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select {
+    width: 300px; /* Adjust width as needed */
+}
+
+/* Adjust margin or any other specific styles if needed */
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select {
+    margin: 5px; /* Add or adjust margin as needed */
+}
+
+
+        .select2-container {
+            width: 100% !important;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+</head>
+<body>
+    <h1 style="text-align:center; color:rgba(255, 255, 255, 0.849)">Paiement</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <!-- Achat Model Fields -->
+        <div class="form-group">
+            <label for="id_client">Client:<br></label>
+            {{ form.client }}
+            <script>
+                $('#id_client').attr('placeholder', 'Enter client');
+            </script>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="id_matiere">Raw Material:</label>
+            <br>
+            {{ form.matiere }}
+            <script>
+                $('#id_matiere').attr('placeholder', 'Enter raw material');
+            </script>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="id_quantity">Quantity:</label>
+            {{ form.quantity }}
+            <script>
+                $('#id_quantity').attr('placeholder', 'Enter quantity');
+            </script>
+        </div>
+        <br>
+        
+        <div class="form-group">
+            <label for="id_prix_U">Unit Price:</label>
+            {{ form.prix_U }}
+            <script>
+                $('#id_prix_U').attr('placeholder', 'Enter unit price');
+            </script>
+        </div>
+        <br>
+        <div class="form-group" style="display: none;">
+            <label for="id_p_credits">Reglement:</label>
+            {{ form.p_credits }}
+            <script>
+                $('#id_p_credits').attr('placeholder', 'Enter reglement');
+            </script>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="id_total_price_output">Prix Totale:</label>
+            <output id="id_total_price_output" style="border-radius: 30px; padding: 10px; width: 100%; margin: 5px; border: 0; background-color: #ffffff28; color: #d5d5d5;"></output>
+        </div>
+        <br>
+        <div class="form-group">
+            <br> <br>
+            <label style="margin-left:100px; position:absolute"  for="partial_payment_checkbox"> Payemenet Partiel:</label>
+            <input style="margin-right:100px; position:absolute" type="checkbox" id="partial_payment_checkbox">
+            <br> <br>
+            <div class="form-group" id="partial_payment_container" style="display:none;">
+                <label id="partial_payment_label" for="id_partial_payment_input">À Payer Partiellement:</label>
+                <input type="number" id="id_partial_payment_input">
+            </div>
+        <br>
+
+        <input type="submit" value="Vendre">
+    </form>
+    <script>
+        $(document).ready(function() {
+            $('#id_client').select2({
+                ajax: {
+                    url: '/your-clients-endpoint/',  // Update this line with the correct URL
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        // assuming data is an array of objects with id and text properties
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: 'Search for a client',
+                minimumInputLength: 1
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#id_matiere').select2({
+                ajax: {
+                    url: '/your-raw-materials-endpoint/',  // Update this line with the correct URL
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        // assuming data is an array of objects with id and text properties
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: 'Search for a raw material',
+                minimumInputLength: 1
+            });
+        });
+    </script> 
+
+    
+    <script>
+        $(document).ready(function() {
+            // Calculate total price when quantity or unit price changes
+            $('#id_quantity, #id_prix_U').change(function() {
+                var quantity = parseFloat($('#id_quantity').val());
+                var unitPrice = parseFloat($('#id_prix_U').val());
+                var totalPrice = quantity * unitPrice;
+                $('#id_total_price_output').text(totalPrice.toFixed(2));
+                $('#id_total_price_output').change();  // Manually trigger the change event
+            });
+            
+            $('#partial_payment_checkbox').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#partial_payment_container').show();
+                } else {
+                    $('#partial_payment_container').hide();
+                }
+                $('#id_partial_payment_input').change();  // Manually trigger the change event
+            });
+    
+            // Calculate reglement when total price or partial payment changes
+            $('#id_total_price_output, #id_partial_payment_input').change(function() {
+                var totalPrice = parseFloat($('#id_total_price_output').text());
+                var partialPayment = parseFloat($('#id_partial_payment_input').val()) || 0;
+                var reglement = totalPrice - partialPayment;
+                $('#id_p_credits').val(reglement.toFixed(2));
+            });
+        });
+    </script>
+    
+        
+</body>
+</html>
