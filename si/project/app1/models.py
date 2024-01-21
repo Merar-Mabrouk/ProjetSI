@@ -105,7 +105,7 @@ class Product(models.Model):
         return self.Desiginiation_P
 
 class VenteP(models.Model):
-    num_V=models.IntegerField()
+    num_V=models.IntegerField(primary_key=True, auto_created=True, unique=True, editable=False)
     Date_v=models.DateTimeField(auto_now_add=True)
     quantity=models.IntegerField()
     prix_Unit=models.FloatField()
