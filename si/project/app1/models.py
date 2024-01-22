@@ -97,7 +97,7 @@ class Stock(models.Model):
 #     rigli=models.BooleanField(default=False)
 #     restant=models.FloatField(max_length=10,null=False)
 class Product(models.Model):
-    Code_P=models.CharField(max_length=10,null=False,auto_created=True)
+    Code_P=models.IntegerField(primary_key=True, auto_created=True, unique=True, editable=False)
     Desiginiation_P=models.CharField(max_length=10)
     Quantity=models.IntegerField()
     prix_Unit=models.IntegerField() 
