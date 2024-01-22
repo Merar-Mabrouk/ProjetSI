@@ -31,6 +31,7 @@ def add_supplier(request):
             msg="the new Supplier is successfully added"
             return render(request,"Supplier.html",{'form':form,'Message':msg})
         else:
+            
             form=SupplierForm()
             msg="add a Supplier"
             return render(request,"Supplier.html",{'form':form,'Message':msg})
@@ -49,6 +50,7 @@ def add_rawMaterial(request):
             return render(request,"Raw.html",{'form':form,'Message':msg})
 
 def add_achat(request):
+    print('our request is: '+str(request))
     suppliers=Supplier.objects.all()
     RawMaterials=RawMaterial.objects.all()
     if(request.method =='POST'):
@@ -236,12 +238,14 @@ def add_product(request):
         return render(request,addProduct,{'form':form})
 
 def add_VenteP(request):
+    print('our request is: '+str(request)) 
     RawMaterials=Product.objects.all()
     clients=Client.objects.all()
     if(request=='POST'):
         form=VentePForm(request.POST)
         if form.is_valid():
             idM=form.cleaned_data['code_p']
+            print('our idm is'+ idM.Desiginiation_P)
             caseM="remove"
             quant=form.cleaned_data['quantity']
             if(modify_product_by_id(idM=idM,case=caseM,count=quant)):
@@ -285,6 +289,10 @@ def regler_venteP(request,pk):
             form=VenteRForm()
             msg="regler la vente"
             return render(request,regletVente,{'form':form, 'vente':vente})
+    else:
+        form=VenteRForm()
+        msg="regler la vente"
+        return render(request,regletVente,{'form':form, 'vente':vente})    
        
 def add_Massrouf(request):
     employe=Employe.objects.all()
@@ -306,6 +314,10 @@ def add_Massrouf(request):
         msg="add Massrouf"            
         return render(request,masrouf,{'form':form,'Message':msg,'employee':employe})
         
+        
+def add_pointage(request):
+    return;
+    
 
 
 ### here u find the deleting stuff ###    
