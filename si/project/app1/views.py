@@ -253,19 +253,21 @@ def add_VenteP(request):
                 reg=form.cleaned_data['p_credits']
                 regler_client(pk=idS,somme=reg,cond='add')
                 form.save()
-                form=VentePForm()
-                msg="the new Vente Product is successfully added"
+                form = VentePForm()
+                msg = "The new Vente Product is successfully added"
             else:
-                msg="the quantity u are trying to sell is superior to what u have"  
-            return render(request,venteP,{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
+                msg = "The quantity you are trying to sell is superior to what you have"
+
         else:
-            form=VentePForm()
-            msg="the form is invalid"
-            return render(request,venteP,{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
+            form = VentePForm()
+            msg = "The form is invalid"
+
     else:
-        form=VentePForm()
-        msg="add a Vente for product"
-        return render(request,venteP,{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
+        form = VentePForm()
+        msg = "Add a Vente for a product"
+
+    return render(request, 'vente_p.html', {'form': form, 'Message': msg, 'clients': clients, 'Raw': RawMaterials})
+
 
 def regler_venteP(request,pk):
     vente=VenteP.objects.get(id=pk)
