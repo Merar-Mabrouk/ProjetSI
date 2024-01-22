@@ -1,6 +1,6 @@
 addClient="Client.html"
 addSupplier="Supplier.html"
-addAchat="achat.html"
+addAchat="Achat.html"
 addVente="vente.html"
 addTransfer="transfer.html"
 modifyClient="ClientM.html"
@@ -14,6 +14,7 @@ listSupplier="SupplierList.html"
 listAchat="AchatList.html"
 listVente="VenteList.html"
 listTransfer="TransferList.html"
+listVenteP='VenteListP.html'
 
 #### here are the reglement part ####
 regletAchat="AchatRegler.html"

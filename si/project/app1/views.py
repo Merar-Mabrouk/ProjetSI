@@ -145,7 +145,7 @@ def add_transfer(request):
 ### here are the modifications ###
 def modify_client(request,pk):
     client=Client.objects.get(id=pk)
-    if(request=='POST'):
+    if(request.method=='POST'):
         form=ClientForm(request.POST,instance=client)
         if form.is_valid():
             form.save()
@@ -167,7 +167,7 @@ def modify_supplier(request,pk):
     
 def regler_vente(request,pk):
     vente=Vente.objects.get(id=pk)
-    if(request=='POST'):
+    if(request.method=='POST'):
         form=VenteRForm(request.POST,instance=vente)
         if form.is_valid():
             cred=form.cleaned_data['p_credits']
@@ -190,7 +190,7 @@ def regler_vente(request,pk):
     
 def regler_Achat(request,pk):
     achat=Achat.objects.get(id=pk)
-    if(request=='POST'):
+    if(request.method=='POST'):
         form=AchatRForm(request.POST,instance=achat)
         if form.is_valid():
             cred=form.cleaned_data['reglement']
@@ -221,7 +221,7 @@ def regler_Achat(request,pk):
 ### here u find the views that are used by the  center###    
 
 def add_product(request):
-    if(request=='POST'):
+    if(request.method=='POST'):
         form=ProductForm(request.POST,instance=Product)
         if(form.is_valid):
             msg="The product was added successfully"
@@ -241,7 +241,7 @@ def add_VenteP(request):
     print('our request is: '+str(request)) 
     RawMaterials=Product.objects.all()
     clients=Client.objects.all()
-    if(request=='POST'):
+    if(request.method=='POST'):
         form=VentePForm(request.POST)
         if form.is_valid():
             idM=form.cleaned_data['code_p']
@@ -271,7 +271,7 @@ def add_VenteP(request):
 
 def regler_venteP(request,pk):
     vente=VenteP.objects.get(id=pk)
-    if(request=='POST'):
+    if(request.method=='POST'):
         form=VenteRForm(request.POST,instance=vente)
         if form.is_valid():
             cred=form.cleaned_data['p_credits']
@@ -298,7 +298,7 @@ def regler_venteP(request,pk):
        
 def add_Massrouf(request):
     employe=Employe.objects.all()
-    if(request=='POST'):
+    if(request.method=='POST'):
         form=MassroufForm(request.POST,instance=Massrouf)
         if form.is_valid():
             cred=form.cleaned_data['Credit']
@@ -318,8 +318,43 @@ def add_Massrouf(request):
         
         
 def add_pointage(request):
-    return;
-    
+    if(request.method=='POST'):
+        form=PointageForm(request.POST,instance=Pointage)
+        if form.is_valid():
+            em=form.cleaned_data['Employe']
+            date=form.cleaned_data['Date_P']
+            p=Pointage.objects.filter(Employee=em,Date_P=date).exists()
+            if(p):
+                msg='you already have the pointage'
+                form=PointageForm()
+                return render(request,Pointage,{'form':form,'Message':msg})
+            else:
+                msg='you are registered in'
+                form.save()
+                form=PointageForm()
+                return render(request,Pointage,{'form':form,'Message':msg})
+        else:
+            msg='you are not registered, something is wrong'
+            form=PointageForm()
+            return render(request,Pointage,{'form':form,'Message':msg})            
+    else:
+        msg="register in"    
+        form=PointageForm()
+        return render(request,Pointage,{'form':form,'Message':msg})
+
+###  here you can find the list of everything ###
+def list_achats(request):
+    achats=Achat.objects.all()
+    return render(request,listAchat,{'achats':achats})
+
+def list_vente(request):
+    ventes=Vente.objects.all()    
+    return render(request,listVente,{'ventes':ventes})
+
+def list_VenteP(request):
+    ventes=VenteP.objects.all()
+    return render(request,listVenteP,{'ventes':ventes})
+
 
 
 ### here u find the deleting stuff ###    
