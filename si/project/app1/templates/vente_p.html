@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add VenteP</title>
+    <title>{{ Message }}</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css">
     <style>
         body {
             background-image: url("https://cdn.svgator.com/images/2022/06/use-svg-as-background-image-particle-strokes.svg");
@@ -47,9 +48,7 @@
         input[type="submit"]:hover {
             background-color: #45a049;
         }
-        
 
-        
         /* General input styling for input and select elements */
         input:not([type="submit"]),
         select {
@@ -62,28 +61,25 @@
             color: #d5d5d5;
         }
 
-        
+        /* Placeholder styling for input and select elements */
+        input::placeholder,
+        select::placeholder {
+            font-size: 12px;
+        }
 
-/* Placeholder styling for input and select elements */
-input::placeholder,
-select::placeholder {
-    font-size: 12px;
-}
+        /* Specific styling for raw material and client inputs */
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select {
+            width: 300px; /* Adjust width as needed */
+        }
 
-/* Specific styling for raw material and supplier inputs */
-.form-group input[type="text"],
-.form-group input[type="number"],
-.form-group select {
-    width: 300px; /* Adjust width as needed */
-}
-
-/* Adjust margin or any other specific styles if needed */
-.form-group input[type="text"],
-.form-group input[type="number"],
-.form-group select {
-    margin: 5px; /* Add or adjust margin as needed */
-}
-
+        /* Adjust margin or any other specific styles if needed */
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select {
+            margin: 5px; /* Add or adjust margin as needed */
+        }
 
         .select2-container {
             width: 100% !important;
@@ -91,17 +87,75 @@ select::placeholder {
     </style>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
-    <script>
-        function calculateTotal() {
-            var quantity = document.getElementById('id_quantity').value;
-            var unitPrice = document.getElementById('id_prix_Unit').value;
-            var total = quantity * unitPrice;
-            document.getElementById('total').value = total;
-        }
-    </script>
+</head>
+<body>
+    <h1 style="text-align:center; color:rgba(255, 255, 255, 0.849)">Paiement</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_code_cl">Client:</label>
+            {{ form.code_cl }}
+            <script>
+                $('#id_code_cl').attr('placeholder', 'Enter client');
+            </script>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="id_code_p">Product:</label>
+            {{ form.code_p }}
+            <script>
+                $('#id_code_p').attr('placeholder', 'Enter product');
+            </script>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="id_quantity">Quantity:</label>
+            {{ form.quantity }}
+            <script>
+                $('#id_quantity').attr('placeholder', 'Enter quantity');
+            </script>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="id_prix_Unit">Unit Price:</label>
+            {{ form.prix_Unit }}
+            <script>
+                $('#id_prix_Unit').attr('placeholder', 'Enter unit price');
+            </script>
+        </div>
+        <br>
+        <div class="form-group" style="display: none;">
+            <label for="id_p_credits">Paiement:</label>
+            {{ form.p_credits }}
+            <script>
+                $('#id_p_credits').attr('placeholder', 'Enter paiement');
+            </script>
+        </div>
+        <br>
+        
+        <div class="form-group">
+            <label for="id_total_price_output">Prix Totale:</label>
+            <output id="id_total_price_output" style="border-radius: 30px; padding: 10px; width: 100%; margin: 5px; border: 0; background-color: #ffffff28; color: #d5d5d5;"></output>
+        </div>
+        <br>
+        <div class="form-group">
+            <br> <br>
+            <label style="margin-left:100px; position:absolute" for="partial_payment_checkbox"> Paiement Partiel:</label>
+            <input style="margin-right:100px; position:absolute" type="checkbox" id="partial_payment_checkbox">
+            <br> <br>
+            <div class="form-group" id="partial_payment_container" style="display:none;">
+                <label id="partial_payment_label" for="id_partial_payment_input">À Payer Partiellement:</label>
+                <input type="number" id="id_partial_payment_input">
+            </div>
+        <br>
+
+        <input type="submit" value="Vendre">
+    </form>
+
     <script>
         $(document).ready(function() {
-            $('#id_client').select2({
+            $('#id_code_cl').select2({
                 ajax: {
                     url: '/your-clients-endpoint/',  // Update this line with the correct URL
                     dataType: 'json',
@@ -113,7 +167,6 @@ select::placeholder {
                         };
                     },
                     processResults: function (data, params) {
-                        // assuming data is an array of objects with id and text properties
                         return {
                             results: data
                         };
@@ -123,13 +176,10 @@ select::placeholder {
                 placeholder: 'Search for a client',
                 minimumInputLength: 1
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#id_product').select2({
+
+            $('#id_code_p').select2({
                 ajax: {
-                    url: '/your-products-endpoint/',  // Update this line with the correct URL
+                    url: '/your-product-endpoint/',  // Update this line with the correct URL
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -139,7 +189,6 @@ select::placeholder {
                         };
                     },
                     processResults: function (data, params) {
-                        // assuming data is an array of objects with id and text properties
                         return {
                             results: data
                         };
@@ -149,25 +198,31 @@ select::placeholder {
                 placeholder: 'Search for a product',
                 minimumInputLength: 1
             });
+
+            $('#id_quantity, #id_prix_Unit').change(function() {
+                var quantity = parseFloat($('#id_quantity').val());
+                var unitPrice = parseFloat($('#id_prix_Unit').val());
+                var totalPrice = quantity * unitPrice;
+                $('#id_total_price_output').text(totalPrice.toFixed(2));
+                $('#id_total_price_output').change();
+            });
+            
+            $('#partial_payment_checkbox').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#partial_payment_container').show();
+                } else {
+                    $('#partial_payment_container').hide();
+                }
+                $('#id_partial_payment_input').change();
+            });
+
+            $('#id_total_price_output, #id_partial_payment_input').change(function() {
+                var totalPrice = parseFloat($('#id_total_price_output').text());
+                var partialPayment = parseFloat($('#id_partial_payment_input').val()) || 0;
+                var p_credits = totalPrice - partialPayment;
+                $('#id_p_credits').val(p_credits.toFixed(2));
+            });
         });
     </script>
-</head>
-<body>
-    <h1>Add VenteP</h1>
-    <form action="" method="POST">
-        {% csrf_token %}
-        <label for="quantity">Quantity:</label><br>
-        <input type="number" id="id_quantity" onchange="calculateTotal()" value="{{ form.quantity.value|default:'' }}"><br>
-        <label for="prix_Unit">Prix Unit:</label><br>
-        <input type="number" id="id_prix_Unit" onchange="calculateTotal()" value="{{ form.prix_Unit.value|default:'' }}"><br>
-        <label for="code_p">Product:</label><br>
-        {{ form.code_p }}<br>
-        <label for="code_cl">Client:</label><br>
-        {{ form.code_cl }}<br>
-        <label for="total">Total:</label><br>
-        <input type="text" id="total" readonly><br>
-        <button type="submit">Submit</button>
-    </form>
-    <p>{{ Message }}</p>
 </body>
 </html>
