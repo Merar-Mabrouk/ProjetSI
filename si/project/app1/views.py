@@ -357,11 +357,11 @@ def list_VenteP(request):
 
 def list_reglementV(request):
     ventes=Vente.objects.filter(p_credits__gt=0)
-    return render(request,listVenteP,{'ventes':ventes})
+    return render(request,listVenteR,{'ventes':ventes})
 
 def list_reglementP(request):
     ventes=VenteP.objects.filter(p_credits__gt=0)
-    return render(request,listVenteP,{'ventes':ventes})
+    return render(request,listVentePR,{'ventes':ventes})
 
 def list_reglementV(request):
     achats=Achat.objects.filter(reglement__gt=0)

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fody Slider</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <style>
+      body {
+        background-image: url("https://cdn.svgator.com/images/2022/06/use-svg-as-background-image-particle-strokes.svg")
+      }
+    </style>
+  </head>
+
+  <body>
+    <section id="tranding">
+      <div class="container">
+        <h3 style="color:white" class="text-center section-subheading">Magasin</h3>
+        <h1 class="text-center section-heading">Menu</h1>
+      </div>
+      <div class="container">
+        <div class="swiper tranding-slider">
+          <div class="swiper-wrapper">
+            <!-- Slide-start -->
+            <div class="swiper-slide tranding-slide" onclick="window.location.href='http://127.0.0.1:8000/achat/'">
+              <div class="tranding-slide-img">
+                <img src="images/tranding-food-1.png" alt="Tranding">
+              </div>
+              <div class="tranding-slide-content">
+                <div class="tranding-slide-content-bottom">
+                  <h2 class="food-name">
+                    Acheter
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <!-- Slide-end -->
+            <!-- Slide-start -->
+            <div class="swiper-slide tranding-slide" onclick="window.location.href='http://127.0.0.1:8000/vente/'">
+              <div class="tranding-slide-img">
+                <img src="images/tranding-food-2.png" alt="Tranding">
+              </div>
+              <div class="tranding-slide-content">
+                <div class="tranding-slide-content-bottom">
+                  <h2 class="food-name">
+                    Vendre
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <!-- Slide-end -->
+            <!-- Slide-start -->
+            <div class="swiper-slide tranding-slide">
+              <div class="tranding-slide-img">
+                <img src="images/tranding-food-3.png" alt="Tranding">
+              </div>
+              <div class="tranding-slide-content">
+                <div class="tranding-slide-content-bottom">
+                  <h2 class="food-name">
+                    Journal Achat
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <!-- Slide-end -->
+            <!-- Slide-start -->
+            <div class="swiper-slide tranding-slide">
+              <div class="tranding-slide-img">
+                <img src="images/tranding-food-4.png" alt="Tranding">
+              </div>
+              <div class="tranding-slide-content">
+                <div class="tranding-slide-content-bottom">
+                  <h2 class="food-name">
+                    Journal Vente
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <!-- Slide-end -->
+            <!-- Slide-start -->
+            <div class="swiper-slide tranding-slide">
+              <div class="tranding-slide-img">
+                <img src="images/tranding-food-9.png" alt="Tranding">
+              </div>
+              <div class="tranding-slide-content">
+                <div class="tranding-slide-content-bottom">
+                  <h2 class="food-name">
+                    Journal Transfert
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <!-- Slide-end -->
+            <!-- Slide-start -->
+            <div class="swiper-slide tranding-slide">
+              <div class="tranding-slide-img">
+                <img src="images/tranding-food-5.png" alt="Tranding">
+              </div>
+              <div class="tranding-slide-content">
+                <div class="tranding-slide-content-bottom">
+                  <h2 class="food-name">
+                    Stock
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <!-- Slide-end -->
+            <!-- Slide-start -->
+            <div class="swiper-slide tranding-slide" onclick="window.location.href='http://127.0.0.1:8000/transfer/'">
+              <div class="tranding-slide-img">
+                <img src="images/tranding-food-6.png" alt="Tranding">
+              </div>
+              <div class="tranding-slide-content">
+                <div class="tranding-slide-content-bottom">
+                  <h2 class="food-name">
+                    Transfert
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <!-- Slide-end -->
+            <!-- Slide-start -->
+            <div class="swiper-slide tranding-slide">
+              <div class="tranding-slide-img">
+                <img src="images/tranding-food-7.png" alt="Tranding">
+              </div>
+              <div class="tranding-slide-content">
+                <div class="tranding-slide-content-bottom">
+                  <h2 class="food-name">
+                    Reglement Achat
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <!-- Slide-end -->
+            <!-- Slide-start -->
+            <div class="swiper-slide tranding-slide">
+              <div class="tranding-slide-img">
+                <img src="images/tranding-food-8.png" alt="Tranding">
+              </div>
+              <div class="tranding-slide-content">
+                <div class="tranding-slide-content-bottom">
+                  <h2 class="food-name">
+                    Reglement Vendre
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <!-- Slide-end -->
+          </div>
+
+          <div class="tranding-slider-control">
+            <div class="swiper-button-prev slider-arrow">
+              <ion-icon name="arrow-back-outline"></ion-icon>
+            </div>
+            <div class="swiper-button-next slider-arrow">
+              <ion-icon name="arrow-forward-outline"></ion-icon>
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+
+</html>
