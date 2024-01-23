@@ -123,6 +123,8 @@ def add_vente(request):
                 msg = "The new Vente is successfully added"
             else:
                 msg = "The quantity you are trying to sell is superior to what you have"
+            return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
+            
         else:
             form=VenteForm()
             msg="ur form is invalid"

@@ -25,7 +25,7 @@ class Client(models.Model):
         return self.last_name+' '+self.first_name
 
 class Supplier(models.Model):
-    code_S = models.CharField(max_length=10, unique=True)
+    code_S = models.IntegerField(primary_key=True, auto_created=True, unique=True)
     first_name = models.CharField(max_length=40, )
     last_name = models.CharField(max_length=40, unique=True)
     address = models.CharField(max_length=100)

@@ -1,14 +1,92 @@
-<form action='' method='POST'>
-  {% csrf_token %}
-  <div class="form-group">
-    <label for="username1"> Username :</label>
-    <input type="text" class="form-control" name="username" aria-describedby="emailHelp" placeholder="Enter Username">
-
-  </div>
-  <div class="form-group">
-    <label for="Password1">Password</label>
-    <input type="password" class="form-control" name="password" placeholder="Password">
-  </div>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            background-image: url("https://cdn.svgator.com/images/2022/06/use-svg-as-background-image-particle-strokes.svg");
+            font-family: Arial, sans-serif;
+            color: #d5d5d5;
+            margin: 0;
+            padding: 0;
+        }
+        
+        form {
+            position: relative;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: rgba(26, 36, 69, 0.267);
+            backdrop-filter: blur(3px);
+        }
+    
+        .btn-primary {
+            background-color: #53af4c;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            padding: 10px 20px;
+            font-size: 14px;
+            margin-left: 50%; /* Center the button */
+            transform: translateX(-50%);
+            margin-top: 20px;
+        }
+        
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+        
+        /* General input styling for input and select elements */
+        input:not([type="submit"]),
+        select {
+            border-radius: 30px;
+            padding: 10px;
+            width: calc(100% - 20px);
+            margin: 5px 0;
+            border: 0;
+            background-color: #ffffff28;
+            color: #d5d5d5;
+        }
+    
+        /* Placeholder styling for input and select elements */
+        input::placeholder,
+        select::placeholder {
+            font-size: 12px;
+        }
+    
+        /* Specific styling for raw material and supplier inputs */
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: calc(100% - 250px); /* Adjust width as needed */
+            margin: 5px 0; /* Add or adjust margin as needed */
+        }
+    </style>
+</head>
+<body>
+    <form action="" method="POST">
+        <h1 style="text-align: center; color: #fff;">Login</h1>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter Username">
+        </div>
+        <br>
+        <br>
+        
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Password">
+        </div>
+        <br>
+        <br>
+        
+        <button type="submit" class="btn-primary">Login</button>
+    </form>
+</body>
+</html>
