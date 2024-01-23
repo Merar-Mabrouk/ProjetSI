@@ -16,3 +16,4 @@ urlpatterns = [
     path('your-raw-materials-endpoint/', views.get_raw_materials, name='get_raw_materials'),
     path('your-product-endpoint/', views.get_Products, name='get_product'),
 ]
+
