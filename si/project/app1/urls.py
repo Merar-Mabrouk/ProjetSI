@@ -7,6 +7,9 @@ from . import views
 urlpatterns = [
     path('',views.identify),
     path('menu/',views.menu,name='menu'),
+    path('list_achat/',views.list_achats,name='listAchat'),
+    path('list_vente/',views.list_vente,name='listVente'),
+    path('list_raw/',views.list_raw,name='listRaw'),
     path('achat/',views.add_achat,name="achat"),
     path('vente/',views.add_vente,name="vente"),
     path('transfer/',views.add_transfer,name="transfer"),

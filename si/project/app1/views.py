@@ -20,6 +20,10 @@ def add_client(request):
             form=ClientForm()
             msg="add a client"
             return render(request,"Client.html",{'form':form,'Message':msg})
+    else:
+        form=ClientForm()
+        msg="add a client"
+        return render(request,"Client.html",{'form':form,'Message':msg})
             
 def menu(request):
     return render(request,"index.html",{})
@@ -37,10 +41,13 @@ def add_supplier(request):
             msg="the new Supplier is successfully added"
             return render(request,"Supplier.html",{'form':form,'Message':msg})
         else:
-            
             form=SupplierForm()
             msg="add a Supplier"
             return render(request,"Supplier.html",{'form':form,'Message':msg})
+    else:
+        form=SupplierForm()
+        msg="add a Supplier"
+        return render(request,"Supplier.html",{'form':form,'Message':msg})
 def add_rawMaterial(request):
     if(request.method =='POST'):
         form=RawForm(request.POST)
@@ -52,8 +59,12 @@ def add_rawMaterial(request):
             return render(request,"Raw.html",{'form':form,'Message':msg})
         else:
             form=RawForm()
-            msg="add a Material"
+            msg="something wrong with the form"
             return render(request,"Raw.html",{'form':form,'Message':msg})
+    else:
+        form=RawForm()
+        msg="add a Material"
+        return render(request,"Raw.html",{'form':form,'Message':msg})
 
 def add_achat(request):
     print('our request is: '+str(request))
@@ -353,6 +364,9 @@ def list_achats(request):
     achats=Achat.objects.all()
     return render(request,listAchat,{'achats':achats})
 
+def list_raw(request):
+    raw=RawMaterial.objects.all()
+    return render(request,listRaw,{'rawMaterial':raw})
 def list_vente(request):
     ventes=Vente.objects.all()    
     return render(request,listVente,{'ventes':ventes})
