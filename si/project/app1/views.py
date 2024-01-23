@@ -21,6 +21,9 @@ def add_client(request):
             msg="add a client"
             return render(request,"Client.html",{'form':form,'Message':msg})
             
+def menu(request):
+    return render(request,"index.html",{})
+
 def identify(request):
     return redirect('login')
 
