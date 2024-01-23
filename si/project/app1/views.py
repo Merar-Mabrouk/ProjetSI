@@ -21,6 +21,9 @@ def add_client(request):
             msg="add a client"
             return render(request,"Client.html",{'form':form,'Message':msg})
             
+def identify(request):
+    return redirect('login')
+
 def add_supplier(request):
     if(request.method =='POST'):
         form=SupplierForm(request.POST)
@@ -357,15 +360,15 @@ def list_VenteP(request):
 
 def list_reglementV(request):
     ventes=Vente.objects.filter(p_credits__gt=0)
-    return render(request,listVenteP,{'ventes':ventes})
+    return render(request,listRegleV,{'ventes':ventes})
 
 def list_reglementP(request):
     ventes=VenteP.objects.filter(p_credits__gt=0)
-    return render(request,listVenteP,{'ventes':ventes})
+    return render(request,listRegleP,{'ventes':ventes})
 
 def list_reglementV(request):
     achats=Achat.objects.filter(reglement__gt=0)
-    return render(request,listAchat,{'achats':achats})
+    return render(request,listRegleA,{'achats':achats})
 
     
         

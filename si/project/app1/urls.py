@@ -5,7 +5,8 @@ from . import views
 
 
 urlpatterns = [
-    path('achat/',views.add_achat),
+    path('',views.identify),
+    path('achat/',views.add_achat,name="achat"),
     path('vente/',views.add_vente),
     path('transfer/',views.add_transfer),
     path('vente_p/',views.add_VenteP),
