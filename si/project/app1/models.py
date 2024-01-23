@@ -113,7 +113,7 @@ class VenteP(models.Model):
     code_cl=models.ForeignKey(Client,on_delete=models.CASCADE)
     code_p=models.ForeignKey(Product,on_delete=models.CASCADE)
     def __str__(self):
-        return "Vente num"+self.num_V
+        return "Vente num"+str(self.num_V)
 
 class Employe(models.Model):
     Code_E = models.CharField(max_length=20, primary_key=True)

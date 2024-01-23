@@ -244,7 +244,7 @@ def add_VenteP(request):
     print('our request is: '+str(request)) 
     RawMaterials=Product.objects.all()
     clients=Client.objects.all()
-    if(request.method=='POST'):
+    if request.method == 'POST':
         form=VentePForm(request.POST)
         if form.is_valid():
             idM=form.cleaned_data['code_p']
@@ -561,8 +561,6 @@ def get_clients(request):
 @require_GET
 def get_Products(request):
     term = request.GET.get('q', '')
-    # Perform a query to retrieve suppliers based on the search term
-    # Replace the following line with your actual query logic
-    products = Product.objects.filter(designation__icontains=term)
-    data = [{'id': product.id, 'text': str(product)} for product in products]
+    products = Product.objects.filter(Desiginiation_P__icontains=term)
+    data = [{'id': product.Code_P, 'text': str(product)} for product in products]
     return JsonResponse(data, safe=False)
