@@ -123,6 +123,7 @@ def add_vente(request):
                 msg = "The new Vente is successfully added"
             else:
                 msg = "The quantity you are trying to sell is superior to what you have"
+            return render(request,"vente.html",{'form':form,'Message':msg,'clients':Client,'Raw':RawMaterials})
         else:
             form=VenteForm()
             msg="ur form is invalid"
@@ -366,7 +367,10 @@ def list_achats(request):
 
 def list_raw(request):
     raw=RawMaterial.objects.all()
-    return render(request,listRaw,{'rawMaterial':raw})
+    return render(request,listRaw,{'raws':raw})
+def list_transfer(request):
+    Trs=Transfer.objects.all()
+    return render(request,listTransfer,{'Trs':Trs})
 def list_vente(request):
     ventes=Vente.objects.all()    
     return render(request,listVente,{'ventes':ventes})

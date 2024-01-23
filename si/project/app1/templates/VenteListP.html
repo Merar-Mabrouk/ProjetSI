@@ -14,12 +14,12 @@
             <thead> numA clients vendu date quantity unite_price </thead>
             {% for vente in ventes %}
             <tr>
-                <td>{{vente.num_vente}}</td>
-                <td>{{vente.client}}</td>
-                <td>{{vente.matiere}}</td>
-                <td>{{vente.date}}</td>
+                <td>{{vente.num_V}}</td>
+                <td>{{vente.code_cl}}</td>
+                <td>{{vente.code_p}}</td>
+                <td>{{vente.date_V}}</td>
                 <td>{{vente.quantity}}</td>
-                <td>{{vente.prix_U}}</td>
+                <td>{{vente.prix_Unit}}</td>
 
                 {% comment %} <td><a href="{% url 'CmdEdit' cmd.id %}"> Edit </a> </td> {% endcomment %}
                 {% comment %} <td><a href="{% url 'CmdDelete' cmd.id %}">Supprimer</a> </td> {% endcomment %}

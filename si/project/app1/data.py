@@ -15,6 +15,7 @@ listAchat="AchatList.html"
 listVente="VenteList.html"
 listTransfer="TransferList.html"
 listVenteP='VenteListP.html'
+listRaw='rawList.html'
 #### here are the reglement part ####
 regletAchat="AchatRegler.html"
 regletVente="VenteRegler.html"

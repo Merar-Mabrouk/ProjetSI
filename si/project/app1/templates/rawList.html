@@ -12,14 +12,11 @@
         <h4>Liste des vente:</h4>  
         <table border="1px">
             <thead> numA clients vendu date quantity unite_price </thead>
-            {% for vente in ventes %}
+            {% for raw in raws %}
             <tr>
-                <td>{{vente.num_vente}}</td>
-                <td>{{vente.client}}</td>
-                <td>{{vente.matiere}}</td>
-                <td>{{vente.date}}</td>
-                <td>{{vente.quantity}}</td>
-                <td>{{vente.prix_U}}</td>
+                <td>{{raw.codeM}}</td>
+                <td>{{raw.designation}}</td>
+                <td>{{raw.Qstock}}</td>
 
                 {% comment %} <td><a href="{% url 'CmdEdit' cmd.id %}"> Edit </a> </td> {% endcomment %}
                 {% comment %} <td><a href="{% url 'CmdDelete' cmd.id %}">Supprimer</a> </td> {% endcomment %}

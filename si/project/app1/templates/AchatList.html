@@ -9,17 +9,17 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
-        <h4>Liste des vente:</h4>  
+        <h4>Liste des Achat:</h4>  
         <table border="1px">
-            <thead> numA clients vendu date quantity unite_price </thead>
-            {% for vente in ventes %}
+            <thead> numA supplier vendu date quantity unite_price reglement</thead>
+            {% for achat in achats %}
             <tr>
-                <td>{{vente.num_vente}}</td>
-                <td>{{vente.client}}</td>
-                <td>{{vente.matiere}}</td>
-                <td>{{vente.date}}</td>
-                <td>{{vente.quantity}}</td>
-                <td>{{vente.prix_U}}</td>
+                <td>{{achat.id}}</td>
+                <td>{{achat.supplier}}</td>
+                <td>{{achat.matier}}</td>
+                <td>{{achat.date}}</td>
+                <td>{{achat.quantity}}</td>
+                <td>{{achat.unit_price}}</td>
 
                 {% comment %} <td><a href="{% url 'CmdEdit' cmd.id %}"> Edit </a> </td> {% endcomment %}
                 {% comment %} <td><a href="{% url 'CmdDelete' cmd.id %}">Supprimer</a> </td> {% endcomment %}

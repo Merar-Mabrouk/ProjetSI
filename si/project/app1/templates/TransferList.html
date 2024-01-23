@@ -9,17 +9,17 @@
         <link rel="stylesheet" href="">
     </head>
     <body>
-        <h4>Liste des vente:</h4>  
+        <h4>Liste des tr:</h4>  
         <table border="1px">
             <thead> numA clients vendu date quantity unite_price </thead>
-            {% for vente in ventes %}
+            {% for tr in Trs %}
             <tr>
-                <td>{{vente.num_vente}}</td>
-                <td>{{vente.client}}</td>
-                <td>{{vente.matiere}}</td>
-                <td>{{vente.date}}</td>
-                <td>{{vente.quantity}}</td>
-                <td>{{vente.prix_U}}</td>
+                <td>{{tr.num_tr}}</td>
+                <td>{{tr.centre}}</td>
+                <td>{{tr.matiere}}</td>
+                <td>{{tr.date}}</td>
+                <td>{{tr.quantity}}</td>
+                <td>{{tr.prix_Unit}}</td>
 
                 {% comment %} <td><a href="{% url 'CmdEdit' cmd.id %}"> Edit </a> </td> {% endcomment %}
                 {% comment %} <td><a href="{% url 'CmdDelete' cmd.id %}">Supprimer</a> </td> {% endcomment %}
