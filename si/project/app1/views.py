@@ -398,7 +398,7 @@ def list_reglementP(request):
     ventes=VenteP.objects.filter(p_credits__gt=0)
     return render(request,listVentePR,{'ventes':ventes})
 
-def list_reglementV(request):
+def list_reglementA(request):
     achats=Achat.objects.filter(reglement__gt=0)
     return render(request,listRegleA,{'achats':achats})
 
