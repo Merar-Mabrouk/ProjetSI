@@ -10,6 +10,6 @@ def login_user(request):
             login(request, user)
             return redirect('menu')
         else:
-            pass
+            return render(request,'login.html',{}) 
     else:    
         return render(request,'login.html',{})

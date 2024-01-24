@@ -192,6 +192,46 @@ def modify_supplier(request,pk):
         form=ClientForm()        
         return render(request,modifySupplier,{'form':form,})
     
+
+def modify_achat(request, pk):
+    achat = Achat.objects.get(id=pk)
+    
+    if request.method == 'POST':
+        form = AchatForm(request.POST, instance=achat)
+        if form.is_valid():
+            form.save()
+            return redirect('list_achats')  # Replace with the actual URL for listing achats
+    else:
+        form = AchatForm(instance=achat)
+        
+    return render(request, "achat.html", {'form': form})
+
+def modify_vente(request, pk):
+    vente = Vente.objects.get(num_vente=pk)
+    
+    if request.method == 'POST':
+        form = VenteForm(request.POST, instance=vente)
+        if form.is_valid():
+            form.save()
+            return redirect('list_ventes')  # Assuming you have a URL named 'list_ventes' for listing ventes
+    else:
+        form = VenteForm(instance=vente)
+        
+    return render(request, "venteM.html", {'form': form})
+
+def modify_transfer(request, pk):
+    transfer = Transfer.objects.get(num_tr=pk)
+    
+    if request.method == 'POST':
+        form = TransferForm(request.POST, instance=transfer)
+        if form.is_valid():
+            form.save()
+            return redirect('list_transfers')  # Assuming you have a URL named 'list_transfers' for listing transfers
+    else:
+        form = TransferForm(instance=transfer)
+        
+    return render(request, "transferM.html", {'form': form})
+###   ###    
 def regler_vente(request,pk):
     vente=Vente.objects.get(id=pk)
     if(request.method=='POST'):
@@ -417,6 +457,32 @@ def delete_achat(request, pk):
     
     return render(request, "achat_delete.html", {'achat': achat})          
             
+def delete_client(request, pk):
+    client = Client.objects.get(id=pk)
+    
+    if request.method == 'POST':
+        client.delete()
+        return redirect('list_clients')  # Assuming you have a URL named 'list_clients' for listing clients
+    
+    return render(request, "client_delete.html", {'client': client})   
+
+def delete_transfer(request, pk):
+    transfer = Transfer.objects.get(num_tr=pk)
+    
+    if request.method == 'POST':
+        transfer.delete()
+        return redirect('list_transfers')  # Assuming you have a URL named 'list_transfers' for listing transfers
+    
+    return render(request, "transfer_delete.html", {'transfer': transfer})
+
+def delete_product(request, pk):
+    product = Product.objects.get(Code_P=pk)
+    
+    if request.method == 'POST':
+        product.delete()
+        return redirect('list_products')  # Assuming you have a URL named 'list_products' for listing products
+    
+    return render(request, "product_delete.html", {'product': product})         
 ### here we find functions that are to be used in other one.. ###            
 
 def regler_client(pk, somme, cond):
