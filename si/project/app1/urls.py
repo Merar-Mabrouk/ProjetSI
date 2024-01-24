@@ -22,5 +22,16 @@ urlpatterns = [
     path('your-raw-materials-endpoint/', views.get_raw_materials, name='get_raw_materials'),
     path('your-product-endpoint/', views.get_Products, name='get_product'),
     path('add_supplier', views.add_supplier, name='add_supplier'),
+    path('modify_achat/<int:pk>/', modify_achat, name='modify_achat'),
+    path('delete_achat/<int:pk>/', delete_achat, name='delete_achat'),
+    
+    path('modify_transfer/<int:pk>/', modify_transfer, name='modify_transfer'),
+    path('delete_transfer/<int:pk>/', delete_transfer, name='delete_transfer'),
+    
+    path('modify_vente/<int:pk>/', modify_vente, name='modify_vente'),
+    path('delete_vente/<int:pk>/', delete_vente, name='delete_vente'),
+    
+    path('modify_product/<int:pk>/', modify_product, name='modify_product'),
+    path('delete_product/<int:pk>/', delete_product, name='delete_product'),
 ]
 

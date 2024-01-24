@@ -179,7 +179,8 @@ def modify_client(request,pk):
     else:
         form=ClientForm()        
         return render(request,"clientM.html",{'form':form,})
-    
+
+
 def modify_supplier(request,pk):
     supp=Supplier.objects.get(id=pk)
     if(request=='POST'):
@@ -406,6 +407,15 @@ def list_reglementV(request):
 
 
 ### here u find the deleting stuff ###    
+            
+def delete_achat(request, pk):
+    achat = Achat.objects.get(id=pk)
+    
+    if request.method == 'POST':
+        achat.delete() 
+        return redirect('list_achats')  # Replace with the actual URL for listing achats
+    
+    return render(request, "achat_delete.html", {'achat': achat})          
             
 ### here we find functions that are to be used in other one.. ###            
 
