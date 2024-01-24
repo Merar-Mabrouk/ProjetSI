@@ -414,7 +414,7 @@ def list_achats(request):
     achats=Achat.objects.all()
     return render(request,listAchat,{'achats':achats})
 def list_prod(request):
-    produits=Product.object.all()
+    produits=Product.objects.all()
     return render(request,listProd,{'prods':produits})
 def list_raw(request):
     raw=RawMaterial.objects.all()

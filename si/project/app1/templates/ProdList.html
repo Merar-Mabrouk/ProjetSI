@@ -1,25 +1,108 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        <h4>Liste des prod:</h4>  
-        <table border="1px">
-            {% for prod in prods %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('https://cdn.svgator.com/images/2022/06/use-svg-as-background-image-particle-strokes.svg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        h4 {
+            text-align: center;
+            color: #ffffff; /* Change the color as needed */
+        }
+
+        table {
+            position: absolute;
+            z-index: 2;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            box-shadow: 0 2px 15px rgba(64, 64, 64, .7);
+            border-radius: 15px 15px 15px 15px;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.6); /* Adjust the opacity as needed */
+        }
+
+        th,
+        td {
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        th {
+            background-color: rgba(0, 0, 62, 0.66);
+            color: #fafafa;
+            font-weight: 200;
+            text-transform: uppercase;
+        }
+
+        tr {
+            width: 100%;
+        }
+
+        tr:nth-child(even) {
+            background-color: #eeeeee;
+        }
+
+        /* Added styles for the action buttons */
+        .edit-button {
+            background-color: #e6a819; /* Yellow background color for "Modifier" */
+            color: #fff; /* Text color */
+            padding: 8px 12px;
+            border: none;
+            border-radius: 15px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .delete-button {
+            background-color: #d32f2f; /* Red background color for "Supprimer" */
+            color: #fff; /* Text color */
+            padding: 8px 12px;
+            border: none;
+            border-radius: 15px;
+            text-decoration: none;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 style="text-align: center; margin-top:100px; color: #ffffff;">Stock Du Centre:</h1>
+    <table>
+        <thead>
             <tr>
+                <th>code_P</th>
+                <th>Designation_P</th>
+                <th>Quantity</th>
+                <th>prix_Unit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        {% for prod in prods %}
+        <tr>
                 <td>{{prod.Code_P}}</td>
                 <td>{{prod.Desiginiation_P}}</td>
                 <td>{{prod.Quantity}}</td>
+                <td>{{prod.prix_Unit}}</td>
+            <td>
+                <a href="" class="edit-button">Modifier</a>
+                &nbsp; <a href="" class="delete-button">Supprimer</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
 
-                {% comment %} <td><a href="{% url 'CmdEdit' cmd.id %}"> Edit </a> </td> {% endcomment %}
-                {% comment %} <td><a href="{% url 'CmdDelete' cmd.id %}">Supprimer</a> </td> {% endcomment %}
-            </tr>
-            {%endfor%}
-    </body>
 </html>
