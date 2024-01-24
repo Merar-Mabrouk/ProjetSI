@@ -7,6 +7,7 @@ from .data import *
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User, Group
 def add_client(request):
     if(request.method =='POST'):
         form=ClientForm(request.POST)
@@ -26,7 +27,14 @@ def add_client(request):
         return render(request,"Client.html",{'form':form,'Message':msg})
             
 def menu(request):
-    return render(request,"index.html",{})
+    user = request.user
+    user_groups = user.groups.all()
+    if user_groups.exists():
+        first_group = user_groups.first()
+    else:
+        first_group = None
+    print('hna el wasmou:'+str(first_group))
+    return render(request,"index.html",{'group':str(first_group)})
 
 def identify(request):
     return redirect('login')
@@ -364,7 +372,9 @@ def add_pointage(request):
 def list_achats(request):
     achats=Achat.objects.all()
     return render(request,listAchat,{'achats':achats})
-
+def list_prod(request):
+    produits=Product.object.all()
+    return render(request,listProd,{'prods':produits})
 def list_raw(request):
     raw=RawMaterial.objects.all()
     return render(request,listRaw,{'raws':raw})
