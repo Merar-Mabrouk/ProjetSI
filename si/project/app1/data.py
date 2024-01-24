@@ -19,6 +19,9 @@ listRaw='rawList.html'
 listProd='ProdList.html'
 listAchatR='listAR.html'
 listVenteR='listVR.html'
+listRegleA='reglerAchat.html'
+listVentePR='reglerVenteP.html'
+listVenteR='reglerVente.html'
 #### here are the reglement part ####
 regletAchat="AchatRegler.html"
 regletVente="VenteRegler.html"

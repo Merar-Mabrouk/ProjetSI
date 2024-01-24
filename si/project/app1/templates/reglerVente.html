@@ -13,7 +13,7 @@
             background: url('https://cdn.svgator.com/images/2022/06/use-svg-as-background-image-particle-strokes.svg') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Montserrat', sans-serif;
-            zoom:0.73;
+            zoom:0.6;
         }
 
         h4 {
@@ -83,24 +83,29 @@
     <table>
         <thead>
             <tr>
-              <th>numA</th>
-              <th>supplier</th>
-              <th>vendu</th>
-              <th>date</th>
-              <th>quantity</th>
-              <th>unit_price</th>
-              <th>action</th>
+                <thead>
+                    <tr>
+                      <th>numV</th>
+                      <th>clients</th>
+                      <th>Matiere</th>
+                      <th>vendu date</th>
+                      <th>quantity</th>
+                      <th>unit_price</th>
+                      <th>actions</th>
+                    </tr>
+                  </thead>
+                  
             </tr>
           </thead>          
         <body>
-            {% for achat in achats %}
+            {% for vente in ventes %}
             <tr>
-                <td>{{achat.id}}</td>
-                <td>{{achat.supplier}}</td>
-                <td>{{achat.matiere}}</td>
-                <td>{{achat.date}}</td>
-                <td>{{achat.quantity}}</td>
-                <td>{{achat.unit_price}}</td>
+                <td>{{vente.num_vente}}</td>
+                <td>{{vente.client}}</td>
+                <td>{{vente.matiere}}</td>
+                <td>{{vente.date}}</td>
+                <td>{{vente.quantity}}</td>
+                <td>{{vente.prix_U}}</td>
                 <td>
                     <a href="" class="edit-button">Modifier</a>
                     {% comment %} &nbsp; <a href="" class="delete-button">Supprimer</a></td> {% endcomment %}
