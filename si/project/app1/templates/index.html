@@ -255,30 +255,33 @@ body {
   <body>
     <section id="tranding">
       <div class="container">
-        <h3 style="color:white" class="text-center section-subheading">Magasin</h3>
+        <h3 style="color:white" class="text-center section-subheading">{{ group }}</h3>
         <h1 class="text-center section-heading">Menu</h1>
       </div>
       <div class="container">
         <div class="swiper tranding-slider">
           <div class="swiper-wrapper">
             <!-- Slide-start -->
-            <div class="swiper-slide tranding-slide" onclick="window.location.href='http://127.0.0.1:8000/achat/'">
-              <div class="tranding-slide-img">
-                <!-- Update image source paths -->
-                <img src="{% static 'images/tranding-food-1.png' %}" alt="Tranding">
+{% if group == "magasin" %}
+              <div class="swiper-slide tranding-slide" onclick="window.location.href='{%url 'achat'%}'">
+                <div class="tranding-slide-img">
+                  <!-- Update image source paths -->
+                  <img src="{% static 'images/tranding-food-1.png' %}" alt="Tranding">
 
-              </div>
-              <div class="tranding-slide-content">
-                <div class="tranding-slide-content-bottom">
-                  <h2 class="food-name">
-                    Acheter
-                  </h2>
+                </div>
+                <div class="tranding-slide-content">
+                  <div class="tranding-slide-content-bottom">
+                    <h2 class="food-name">
+                      Acheter
+                    </h2>
+                  </div>
                 </div>
               </div>
-            </div>
+              {% endif %}
             <!-- Slide-end -->
             <!-- Slide-start -->
-            <div class="swiper-slide tranding-slide" onclick="window.location.href='http://127.0.0.1:8000/vente/'">
+            <div class="swiper-slide tranding-slide"
+            onclick="window.location.href={% if group == "magasin" %} '{%url 'vente' %}'{% else %}'{%url 'vprod' %}'{%endif%}">
               <div class="tranding-slide-img">
                 <img src="{% static 'images/tranding-food-2.png' %}" alt="Tranding">
               </div>
@@ -292,7 +295,8 @@ body {
             </div>
             <!-- Slide-end -->
             <!-- Slide-start -->
-            <div class="swiper-slide tranding-slide">
+             {% if group == "magasin"  %}
+            <div class="swiper-slide tranding-slide" onclick="window.location.href='{%url 'listAchat'%}'">
               <div class="tranding-slide-img">
                 <img src="{% static 'images/tranding-food-3.png' %}" alt="Tranding">
               </div>
@@ -304,9 +308,11 @@ body {
                 </div>
               </div>
             </div>
+            {%endif%}
             <!-- Slide-end -->
             <!-- Slide-start -->
-            <div class="swiper-slide tranding-slide">
+            <div class="swiper-slide tranding-slide"
+            onclick="window.location.href={% if group == "magasin" %} '{%url 'listVente' %}'{% else %}'{%url 'listprodS' %}'{%endif%}">
               <div class="tranding-slide-img">
                 <img src="{% static 'images/tranding-food-4.png' %}" alt="Tranding">
               </div>
@@ -320,7 +326,7 @@ body {
             </div>
             <!-- Slide-end -->
             <!-- Slide-start -->
-            <div class="swiper-slide tranding-slide">
+            <div class="swiper-slide tranding-slide" onclick="window.location.href='{%url 'listTransfer'%}'">
               <div class="tranding-slide-img">
                 <img src="{% static 'images/tranding-food-9.png' %}" alt="Tranding">
               </div>
@@ -334,7 +340,9 @@ body {
             </div>
             <!-- Slide-end -->
             <!-- Slide-start -->
-            <div class="swiper-slide tranding-slide">
+            <div class="swiper-slide tranding-slide"
+            onclick="window.location.href={% if group == "magasin" %} '{%url 'listRaw' %}'{% else %}'{%url 'listprod' %}'{%endif%}">
+            >
               <div class="tranding-slide-img">
                 <img src="{% static 'images/tranding-food-5.png' %}" alt="Tranding">
               </div>
@@ -348,7 +356,8 @@ body {
             </div>
             <!-- Slide-end -->
             <!-- Slide-start -->
-            <div class="swiper-slide tranding-slide" onclick="window.location.href='http://127.0.0.1:8000/transfer/'">
+                         {% if group == "magasin"  %}
+            <div class="swiper-slide tranding-slide" onclick="window.location.href='{%url 'transfer'%}'">
               <div class="tranding-slide-img">
                 <img src="{% static 'images/tranding-food-6.png' %}" alt="Tranding">
               </div>
@@ -360,8 +369,10 @@ body {
                 </div>
               </div>
             </div>
+            {% endif %}
             <!-- Slide-end -->
             <!-- Slide-start -->
+{% if group == "magasin"  %}
             <div class="swiper-slide tranding-slide">
               <div class="tranding-slide-img">
                 <img src="{% static 'images/tranding-food-7.png' %}" alt="Tranding">
@@ -374,6 +385,7 @@ body {
                 </div>
               </div>
             </div>
+            {%endif%}
             <!-- Slide-end -->
             <!-- Slide-start -->
             <div class="swiper-slide tranding-slide">
@@ -390,6 +402,7 @@ body {
             </div>
             <!-- Slide-end -->
             <!-- Slide-start -->
+            {% if group == "centre1" or group == "centre2" or group == "centre3"  %}
             <div class="swiper-slide tranding-slide">
               <div class="tranding-slide-img">
                 <img src="{% static 'images/tranding-food-12.png' %}" alt="Tranding">
@@ -402,8 +415,10 @@ body {
                 </div>
               </div>
             </div>
+             {%endif%}
             <!-- Slide-end -->
             <!-- Slide-start -->
+            {% if group == "centre1" or group == "centre2" or group == "centre3"  %}
             <div class="swiper-slide tranding-slide">
               <div class="tranding-slide-img">
                 <img src="{% static 'images/tranding-food-10.png' %}" alt="Tranding">
@@ -416,8 +431,10 @@ body {
                 </div>
               </div>
             </div>
+            {%endif%}
             <!-- Slide-end -->
             <!-- Slide-start -->
+            {% if group == "centre1" or group == "centre2" or group == "centre3"  %}
             <div class="swiper-slide tranding-slide">
               <div class="tranding-slide-img">
                 <img src="{% static 'images/tranding-food-11.png' %}" alt="Tranding">
@@ -430,6 +447,7 @@ body {
                 </div>
               </div>
             </div>
+            {%endif%}
             <!-- Slide-end -->
 
           </div>
