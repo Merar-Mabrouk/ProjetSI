@@ -85,10 +85,11 @@
             <tr>
               <th>numA</th>
               <th>supplier</th>
-              <th>vendu</th>
+              <th>Matiere</th>
               <th>date</th>
               <th>quantity</th>
               <th>unit_price</th>
+              <th>reglement</th>
               <th>action</th>
             </tr>
           </thead>          
@@ -101,8 +102,9 @@
                 <td>{{achat.date}}</td>
                 <td>{{achat.quantity}}</td>
                 <td>{{achat.unit_price}}</td>
+                <td>{{achat.reglement}}</td>
                 <td>
-                    <a href="" class="edit-button">Regler</a>
+                    <a href="{% url 'regler_achat' achat.id %}" class="edit-button">Regler</a>
                     {% comment %} &nbsp; <a href="" class="delete-button">Supprimer</a></td> {% endcomment %}
             </tr>
             {% endfor %}
