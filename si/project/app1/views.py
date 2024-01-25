@@ -81,18 +81,18 @@ def add_achat(request):
     if(request.method =='POST'):
         form=AchatForm(request.POST)
         if form.is_valid():
-            # Manually process 'supplier' and 'matiere' fields
-            try:
-                supplier_id = request.POST.get('supplier')
-                supplier = Supplier.objects.get(id=supplier_id)
-                form.instance.supplier = supplier
+            # # Manually process 'supplier' and 'matiere' fields
+            # try:
+            #     supplier_id = request.POST.get('supplier')
+            #     supplier = Supplier.objects.get(code_S=supplier_id)
+            #     form.instance.supplier = supplier
 
-                matiere_id = request.POST.get('matiere')
-                matiere = RawMaterial.objects.get(id=matiere_id)
-                form.instance.matiere = matiere
-            except ObjectDoesNotExist:
-                form.add_error(None, 'Invalid supplier or raw material')
-                return render(request,"achat.html",{'form':form,'Message':'Invalid supplier or raw material','supp':suppliers,'Raw':RawMaterials})
+            #     matiere_id = request.POST.get('matiere')
+            #     matiere = RawMaterial.objects.get(codeM=matiere_id)
+            #     form.instance.matiere = matiere
+            # except ObjectDoesNotExist:
+            #     form.add_error(None, 'Invalid supplier or raw material')
+            #     return render(request,"achat.html",{'form':form,'Message':'Invalid supplier or raw material','supp':suppliers,'Raw':RawMaterials})
 
             form.save()
             idM=form.cleaned_data['matiere']
@@ -264,23 +264,25 @@ def regler_Achat(request,pk):
             if(achat.reglement<cred):
                 msg="the money added is too much"
                 form=AchatRForm()
-                return render(request,regletAchat,{'form':form, 'achat':achat})
+                return render(request,regletAchat,{'form':form, 'achat':achat, 'Message':msg})
             else:
-                form.save()
+                
                 idS=form.cleaned_data['supplier']
                 reg=form.cleaned_data['reglement']
                 regler_supplier(pk=idS,somme=reg,cond='regler')
                 msg="the cut was added successfully"
-                return redirect(listAchat)
-                
+                form.instance.reglement=achat.reglement-form.instance.reglement
+                form.save()
+                return redirect("listAchatR")
+            
         else:
-            form=AchatRForm()
-            msg="regler l'Achat"
-            return render(request,regletAchat,{'form':form, 'achat':achat})
+            form=AchatRForm(instance=achat)
+            msg="something went wrong"
+            return render(request,regletAchat,{'form':form, 'achat':achat, 'Message':msg})
     else:
-        form=AchatRForm()
+        form=AchatRForm(instance=achat)
         msg="regler l'Achat"
-        return render(request,regletAchat,{'form':form, 'achat':achat})
+        return render(request,regletAchat,{'form':form, 'achat':achat , 'Message':msg})
         
         
         
@@ -644,7 +646,7 @@ def get_suppliers(request):
     # Perform a query to retrieve suppliers based on the search term
     # Replace the following line with your actual query logic
     suppliers = Supplier.objects.filter(first_name__icontains=term)
-    data = [{'id': supplier.id, 'text': str(supplier)} for supplier in suppliers]
+    data = [{'id': supplier.code_S, 'text': str(supplier)} for supplier in suppliers]
     return JsonResponse(data, safe=False)
 
 @require_GET

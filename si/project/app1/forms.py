@@ -36,12 +36,12 @@ class TransferForm(forms.ModelForm):
 class AchatRForm(forms.ModelForm):
     class Meta:
         model = Achat
-        fields = ['reglement']
+        fields = ['reglement','supplier']
         
 class VenteRForm(forms.ModelForm):
     class Meta:
         model = Vente
-        fields = ['p_credits']
+        fields = ['p_credits','client']
           
 ###  here the things used in the centres  ###
 class ProductForm(forms.ModelForm):

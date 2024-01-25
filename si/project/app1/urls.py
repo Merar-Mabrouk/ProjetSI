@@ -25,6 +25,7 @@ urlpatterns = [
     path('your-raw-materials-endpoint/', views.get_raw_materials, name='get_raw_materials'),
     path('your-product-endpoint/', views.get_Products, name='get_product'),
     path('add_supplier', views.add_supplier, name='add_supplier'),
+    path('regler_achat/<int:pk>/', views.regler_Achat, name='regler_achat'),
     path('modify_achat/<int:pk>/', modify_achat, name='modify_achat'),
     path('delete_achat/<int:pk>/', delete_achat, name='delete_achat'),
     
